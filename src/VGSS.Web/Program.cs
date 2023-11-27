@@ -1,7 +1,8 @@
-using VGSS.Web.Components;
+using AutoWire.MicrosoftDependencyInjection;
+using System.Reflection;
 using VGSS.Application;
 using VGSS.MockPersistence;
-using VGSS.Web.Components.ViewBlogPosts;
+using VGSS.Web.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +11,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 builder.Services
-    .AddScoped<IViewBlogPosts, ViewBlogPosts>()
+    .AddAutoWire(b => b.AddMicrosoftDependencyInjectionWiring())
     .AddApplication()
     .AddMockPersistence()
     .AddMediatR(c =>
@@ -35,6 +36,7 @@ app.UseStaticFiles();
 app.UseAntiforgery();
 
 app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode();
+   .AddAdditionalAssemblies(AppDomain.CurrentDomain.GetAssemblies().Except(new[] { Assembly.GetExecutingAssembly() }).ToArray())
+   .AddInteractiveServerRenderMode();
 
 app.Run();

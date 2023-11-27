@@ -6,23 +6,28 @@ internal sealed class GetBlogPostsImpl : IGetBlogPosts
 {
     private readonly List<BlogPost> _blogPosts;
 
-    public GetBlogPostsImpl()
+    public GetBlogPostsImpl(IGetUser getUser)
     {
-        static BlogPost create()
+        var getUserImpl = getUser as GetUserImpl;
+        static BlogPost create(string username, GetUserImpl getUserImpl)
         {
-            var user = User.New("username");
+            var user = User.New(username);
+            getUserImpl.AddUser(user);
             return user.PostNewBlogPost("This is a title", "this is content");
         };
+
         _blogPosts = new List<BlogPost>
         {
-            create()
+            create("Ken", getUserImpl!),
+            create("Henk", getUserImpl!),
+            create("Klaas", getUserImpl!),
         };
     }
 
     public Task<BlogPost> GetBlogPostById(BlogPostId blogPostId)
     {
         return Task.FromResult(
-            _blogPosts.Single(x => x.Key.Value == blogPostId.Value)
+            _blogPosts.Single(x => x.Key == blogPostId)
             );
     }
 

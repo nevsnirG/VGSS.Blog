@@ -2,7 +2,7 @@
 using VGSS.Application.ViewBlogPost;
 using VGSS.Domain;
 
-namespace VGSS.Web.Components.ViewBlogPosts;
+namespace VGSS.Web.ViewBlogPosts;
 
 public interface IViewBlogPosts
 {
