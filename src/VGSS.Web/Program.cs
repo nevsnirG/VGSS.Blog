@@ -1,3 +1,4 @@
+using AutoWire.AssemblyScanner;
 using AutoWire.MicrosoftDependencyInjection;
 using System.Reflection;
 using VGSS.Application;

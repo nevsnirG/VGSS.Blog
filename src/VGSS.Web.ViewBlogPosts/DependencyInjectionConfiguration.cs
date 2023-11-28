@@ -1,4 +1,4 @@
-﻿using AutoWire.Abstractions;
+﻿using AutoWire.Contract;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace VGSS.Web.ViewBlogPosts;

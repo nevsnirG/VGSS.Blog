@@ -12,8 +12,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\AutoWire\AutoWire.Abstractions\AutoWire.Abstractions.csproj" />
-		<ProjectReference Include="..\..\..\AutoWire\AutoWire.MicrosoftDependencyInjection\AutoWire.MicrosoftDependencyInjection.csproj" />
+		<ProjectReference Include="..\..\..\AutoWire\AutoWire.Contract\AutoWire.Contract.csproj" />
 		<ProjectReference Include="..\VGSS.Application\VGSS.Application.csproj" />
 	</ItemGroup>
 
