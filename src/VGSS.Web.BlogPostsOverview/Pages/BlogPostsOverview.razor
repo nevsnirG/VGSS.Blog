@@ -1,0 +1,24 @@
+﻿@page "/"
+@using VGSS.Domain
+@using MediatR
+@using VGSS.Application
+@using VGSS.Domain.Ports
+@using BlogPostsOverviewQuery = Application.BlogPostsOverview.Query
+@using BlogPostsViewModel = Application.BlogPostsOverview.ViewModel;
+@inject IMediator _mediator;
+
+
+@foreach (var blogPost in _viewModels!)
+{
+    <p>@blogPost.Title</p>
+    @($"{blogPost.Views} View(s) - Posted by {blogPost.PostedBy.Username}")
+}
+
+@code{
+    private IReadOnlyCollection<BlogPostsViewModel>? _viewModels;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _viewModels = await _mediator.Send(new BlogPostsOverviewQuery());
+    }
+}

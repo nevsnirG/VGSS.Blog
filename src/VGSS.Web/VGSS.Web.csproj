@@ -10,7 +10,8 @@
     <ProjectReference Include="..\..\..\AutoWire\AutoWire.MicrosoftDependencyInjection\AutoWire.MicrosoftDependencyInjection.csproj" />
     <ProjectReference Include="..\VGSS.Application\VGSS.Application.csproj" />
     <ProjectReference Include="..\VGSS.MockPersistence\VGSS.MockPersistence.csproj" />
-    <ProjectReference Include="..\VGSS.Web.ViewBlogPosts\VGSS.Web.ViewBlogPosts.csproj" />
+    <ProjectReference Include="..\VGSS.Web.BlogPostsOverview\VGSS.Web.BlogPostsOverview.csproj" />
+    <ProjectReference Include="..\VGSS.Web.ViewBlogPost\VGSS.Web.ViewBlogPost.csproj" />
   </ItemGroup>
 
 </Project>

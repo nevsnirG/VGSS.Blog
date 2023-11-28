@@ -1,5 +1,6 @@
 ﻿namespace VGSS.Domain.Ports;
 public interface IGetUser
 {
-    public Task<User> GetByUserId(UserId userId);
+    Task<User> GetByUserId(UserId userId);
+    Task<IReadOnlyCollection<User>> GetUsersByIds(UserId[] ids);
 }

@@ -1,0 +1,22 @@
+﻿@page "/blogpost/{identifier}"
+@using MediatR
+@using VGSS.Domain.Ports
+@using BlogPostQuery = VGSS.Application.ViewBlogPost.Query
+@using BlogPostViewModel = VGSS.Application.ViewBlogPost.ViewModel
+@inject IMediator _mediator
+
+<h1>@_viewModel!.Title</h1>
+<p>@_viewModel.Content</p>
+
+@code {
+    [Parameter]
+    public string? Identifier { get; set; }
+
+    private BlogPostViewModel? _viewModel;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var blogPostId = BlogPostId.FromValue(Guid.Parse(Identifier!));
+        _viewModel = await _mediator.Send(new BlogPostQuery(blogPostId));
+    }
+}

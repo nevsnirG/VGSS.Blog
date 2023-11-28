@@ -42,9 +42,9 @@ public class BlogPost : Entity<BlogPostId>
         return new BlogPost(blogPostId, postedBy, title, content, 0, DateTimeOffset.UtcNow);
     }
 
-    public void View(UserId viewedBy)
+    public void View(/*UserId viewedBy*/)
     {
         Views++;
-        RaiseDomainEvent(new BlogPostViewed(Key, viewedBy, DateTimeOffset.UtcNow));
+        //RaiseDomainEvent(new BlogPostViewed(Key, viewedBy, DateTimeOffset.UtcNow));
     }
 }

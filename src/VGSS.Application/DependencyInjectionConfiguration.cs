@@ -2,7 +2,7 @@
 using MinimalDomainEvents.Dispatcher.MediatR;
 
 namespace VGSS.Application;
-public static  class DependencyInjectionConfiguration
+public static class DependencyInjectionConfiguration
 {
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {

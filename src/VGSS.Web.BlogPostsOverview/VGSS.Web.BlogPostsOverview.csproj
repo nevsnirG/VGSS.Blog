@@ -12,7 +12,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\AutoWire\AutoWire.Contract\AutoWire.Contract.csproj" />
 		<ProjectReference Include="..\VGSS.Application\VGSS.Application.csproj" />
 	</ItemGroup>
 

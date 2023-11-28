@@ -4,22 +4,17 @@ using VGSS.Domain.Ports;
 namespace VGSS.MockPersistence;
 internal sealed class GetUserImpl : IGetUser
 {
-    private readonly List<User> _users;
-
-    public GetUserImpl()
-    {
-        _users = new List<User>();
-    }
-
     public Task<User> GetByUserId(UserId userId)
     {
         return Task.FromResult(
-            _users.SingleOrDefault(x => x.Key == userId) ?? User.New("Henk")
+            SeedData.Users.SingleOrDefault(x => x.Key == userId) ?? User.New("Henk")
             );
     }
 
-    internal void AddUser(User user)
+    public Task<IReadOnlyCollection<User>> GetUsersByIds(UserId[] ids)
     {
-        _users.Add(user);
+        return Task.FromResult(
+            (IReadOnlyCollection<User>)SeedData.Users.Where(x => ids.Contains(x.Key)).ToList().AsReadOnly()
+            );
     }
 }
