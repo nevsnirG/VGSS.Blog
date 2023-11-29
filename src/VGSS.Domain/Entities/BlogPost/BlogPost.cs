@@ -1,5 +1,4 @@
 ﻿using MinimalRichDomain.SourceGenerators;
-using VGSS.Domain.Entities.BlogPost;
 
 namespace VGSS.Domain;
 
