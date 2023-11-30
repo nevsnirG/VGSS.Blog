@@ -1,4 +1,6 @@
-﻿namespace VGSS.Domain.Ports;
+﻿using VGSS.Domain.BlogAggregate;
+
+namespace VGSS.Domain.Ports;
 public interface IGetBlogPosts
 {
     Task<IReadOnlyCollection<BlogPost>> GetBlogPosts();

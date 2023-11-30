@@ -1,7 +1,8 @@
 ﻿using MediatR;
+using VGSS.Domain.UserAggregate;
 using MinimalDomainEvents.Contract;
 
-namespace VGSS.Domain;
+namespace VGSS.Domain.BlogAggregate.Events;
 public class NewBlogPostPostedEvent : IDomainEvent, INotification
 {
     public UserId PostedBy { get; }

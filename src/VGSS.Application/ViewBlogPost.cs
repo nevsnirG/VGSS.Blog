@@ -1,7 +1,8 @@
 ﻿using MediatR;
-using VGSS.Domain;
-using VGSS.Domain.Entities.BlogPost;
+using VGSS.Domain.BlogAggregate;
+using VGSS.Domain.BlogAggregate.Events;
 using VGSS.Domain.Ports;
+using VGSS.Domain.UserAggregate;
 
 namespace VGSS.Application;
 public static class ViewBlogPost
@@ -9,7 +10,7 @@ public static class ViewBlogPost
     public sealed record class UserViewModel(string Username, UserId UserId);
     public sealed record class ViewModel(string Title, string Content, uint Views, UserViewModel PostedBy, DateTimeOffset PostedAt);
     private static UserViewModel ToViewModel(this User user) =>
-        new(user.Username, user.Key);
+        new(user.Username, user.Id);
     private static ViewModel ToViewModelWithUser(this BlogPost blogPost, UserViewModel userViewModel) =>
         new(blogPost.Title, blogPost.Content, blogPost.Views, userViewModel, blogPost.PostedAt);
 

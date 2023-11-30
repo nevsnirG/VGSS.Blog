@@ -1,6 +1,8 @@
 ﻿using MediatR;
-using VGSS.Domain;
+using VGSS.Domain.BlogAggregate;
+using VGSS.Domain.BlogAggregate.Events;
 using VGSS.Domain.Ports;
+using VGSS.Domain.UserAggregate;
 
 namespace VGSS.Application;
 public static class NewBlogPost

@@ -2,13 +2,13 @@
 using MinimalDomainEvents.Core;
 
 namespace VGSS.Domain;
-public abstract class Entity<TKey>
+public abstract class Entity<TId>
 {
-    public TKey Key { get; }
+    public TId Id { get; }
 
-    protected Entity(TKey key)
+    protected Entity(TId id)
     {
-        Key = key;
+        Id = id;
     }
 
     protected virtual void RaiseDomainEvent(IDomainEvent domainEvent)

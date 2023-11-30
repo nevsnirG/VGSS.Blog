@@ -1,4 +1,7 @@
-﻿namespace VGSS.Domain.Ports;
+﻿using VGSS.Domain.UserAggregate;
+
+
+namespace VGSS.Domain.Ports;
 public interface IGetUser
 {
     Task<User> GetByUserId(UserId userId);

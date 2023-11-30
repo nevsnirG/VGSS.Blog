@@ -1,6 +1,7 @@
-﻿using MinimalRichDomain.SourceGenerators;
+﻿using VGSS.Domain.UserAggregate;
+using MinimalRichDomain.SourceGenerators;
 
-namespace VGSS.Domain;
+namespace VGSS.Domain.BlogAggregate;
 
 [GenerateId]
 public class BlogPost : Entity<BlogPostId>

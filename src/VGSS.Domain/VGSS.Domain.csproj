@@ -12,9 +12,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\MinimalDomainEvents\src\MinimalDomainEvents.Core\MinimalDomainEvents.Core.csproj" />
-		<ProjectReference Include="..\..\..\MinimalRichDomain\src\MinimalRichDomain.SourceGenerators\MinimalRichDomain.SourceGenerators.csproj"
-						  OutputItemType="Analyzer"
-						  ReferenceOutputAssembly="false" />
+		<ProjectReference Include="..\..\..\MinimalRichDomain\src\MinimalRichDomain.SourceGenerators\MinimalRichDomain.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
 		<ProjectReference Include="..\..\..\MinimalRichDomain\src\MinimalRichDomain.SourceGenerators\MinimalRichDomain.SourceGenerators.csproj" />
 	</ItemGroup>
 
