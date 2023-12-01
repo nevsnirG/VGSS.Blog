@@ -7,14 +7,14 @@ namespace VGSS.Application;
 public static class BlogPostsOverview
 {
     public sealed record class Query() : IRequest<IReadOnlyCollection<ViewModel>>;
-    public sealed record class ViewModel(string Title, uint Views, DateTimeOffset PostedAt, UserViewModel PostedBy);
+    public sealed record class ViewModel(BlogPostId Id, string Title, uint Views, DateTimeOffset PostedAt, UserViewModel PostedBy);
     public sealed record class UserViewModel(string Username, UserId UserId);
 
     private static UserViewModel ToViewModel(this User user) =>
          new(user.Username, user.Id);
 
     private static ViewModel ToViewModelWithUser(this BlogPost blogPost, UserViewModel userViewModel) =>
-        new(blogPost.Title, blogPost.Views, blogPost.PostedAt, userViewModel);
+        new(blogPost.Id, blogPost.Title, blogPost.Views, blogPost.PostedAt, userViewModel);
 
     internal sealed class ViewBlogPostsQueryHandler : IRequestHandler<Query, IReadOnlyCollection<ViewModel>>
     {

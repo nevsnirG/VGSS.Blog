@@ -1,6 +1,7 @@
 using AssembleMe.MicrosoftDependencyInjection;
 using AutoWire.MicrosoftDependencyInjection;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Net.Http.Headers;
 using System.Reflection;
 using VGSS.Application;
 using VGSS.MockPersistence;
@@ -21,6 +22,16 @@ builder.Services
         c.AutoRegisterRequestProcessors = true;
         c.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
     });
+
+builder.Services.Configure<StaticFileOptions>(options =>
+{
+    options.OnPrepareResponse = ctx =>
+    {
+        const int durationInSeconds = 60 * 60 * 24 * 7;
+        ctx.Context.Response.Headers[HeaderNames.CacheControl] =
+            "public,max-age=" + durationInSeconds;
+    };
+});
 
 var app = builder.Build();
 

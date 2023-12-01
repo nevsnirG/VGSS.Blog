@@ -15,6 +15,15 @@
 <body>
     <Routes />
     <script src="_framework/blazor.web.js"></script>
+    <script>
+        (function start() {
+            Blazor.start({
+                logLevel: 1, // LogLevel.Debug
+                // Omit this part for WASM
+                configureSignalR: builder => builder.configureLogging("debug") // LogLevel.Debug
+            });
+        })()
+    </script>
 </body>
 
 </html>

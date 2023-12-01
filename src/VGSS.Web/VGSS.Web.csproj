@@ -11,7 +11,6 @@
     <ProjectReference Include="..\..\..\AutoWire\AutoWire.MicrosoftDependencyInjection\AutoWire.MicrosoftDependencyInjection.csproj" />
     <ProjectReference Include="..\VGSS.Application\VGSS.Application.csproj" />
     <ProjectReference Include="..\VGSS.MockPersistence\VGSS.MockPersistence.csproj" />
-    <ProjectReference Include="..\VGSS.Web.Blog\VGSS.Web.Blog.csproj" />
   </ItemGroup>
 
 </Project>
