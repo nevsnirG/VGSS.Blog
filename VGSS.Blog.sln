@@ -19,8 +19,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinimalDomainEvents.Dispatc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinimalDomainEvents.Dispatcher.MediatR", "..\MinimalDomainEvents\src\MinimalDomainEvents.Dispatcher.MediatR\MinimalDomainEvents.Dispatcher.MediatR.csproj", "{12B613C1-0AD9-4A0F-AE92-702D7AA0F7F1}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{51BC4254-95CF-426E-89B2-CECCDB1F2792}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External", "External", "{2F1C09DF-FF1B-4218-8476-FAEB9A44BE53}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinimalRichDomain.SourceGenerators", "..\MinimalRichDomain\src\MinimalRichDomain.SourceGenerators\MinimalRichDomain.SourceGenerators.csproj", "{2864C661-E9EF-465D-871D-8D4B032AC48E}"
@@ -102,7 +100,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{91C5F3AF-3384-4414-B091-608047C6E5BF} = {51BC4254-95CF-426E-89B2-CECCDB1F2792}
 		{87578527-6BFF-4270-B27F-A242F5EE7670} = {2F1C09DF-FF1B-4218-8476-FAEB9A44BE53}
 		{65ADFC22-F13E-4803-BD6C-5BCB52A7F72E} = {2F1C09DF-FF1B-4218-8476-FAEB9A44BE53}
 		{59C9DEC1-3265-4A19-8A10-44D967A9858B} = {2F1C09DF-FF1B-4218-8476-FAEB9A44BE53}
