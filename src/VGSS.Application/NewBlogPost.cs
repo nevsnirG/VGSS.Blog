@@ -2,6 +2,7 @@
 using VGSS.Domain.BloggerAggregate;
 using VGSS.Domain.Ports;
 using VGSS.Domain.BloggerAggregate.Events;
+using VGSS.Domain.BloggerAggregate.ValueObjects;
 
 namespace VGSS.Application;
 public static class NewBlogPost

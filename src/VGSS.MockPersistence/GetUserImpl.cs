@@ -1,5 +1,6 @@
 ﻿using VGSS.Domain.Ports;
 using VGSS.Domain.BloggerAggregate;
+using VGSS.Domain.BloggerAggregate.ValueObjects;
 
 namespace VGSS.MockPersistence;
 internal sealed class GetUserImpl : IGetBlogger

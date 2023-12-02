@@ -1,6 +1,7 @@
 ﻿using MinimalDomainEvents.Contract;
 using VGSS.Domain.BloggerAggregate;
 using VGSS.Domain.BloggerAggregate.Events;
+using VGSS.Domain.BloggerAggregate.ValueObjects;
 
 namespace VGSS.MockPersistence;
 public static class SeedData
