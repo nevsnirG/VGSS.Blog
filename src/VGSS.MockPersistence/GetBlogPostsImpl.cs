@@ -1,5 +1,5 @@
-﻿using VGSS.Domain.BlogAggregate;
-using VGSS.Domain.Ports;
+﻿using VGSS.Domain.Ports;
+using VGSS.Domain.BloggerAggregate;
 
 namespace VGSS.MockPersistence;
 internal sealed class GetBlogPostsImpl : IGetBlogPosts

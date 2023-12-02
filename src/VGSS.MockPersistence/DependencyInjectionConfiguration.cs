@@ -7,7 +7,7 @@ public static class DependencyInjectionConfiguration
     public static IServiceCollection AddMockPersistence(this IServiceCollection services)
     {
         return services
-            .AddScoped<IGetUser, GetUserImpl>()
+            .AddScoped<IGetBlogger, GetUserImpl>()
             .AddScoped<IGetBlogPosts, GetBlogPostsImpl>()
             ;
     }

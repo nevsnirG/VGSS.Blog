@@ -1,30 +1,29 @@
 ﻿using MediatR;
-using VGSS.Domain.BlogAggregate;
+using VGSS.Domain.BloggerAggregate;
 using VGSS.Domain.Ports;
-using VGSS.Domain.UserAggregate;
 
 namespace VGSS.Application;
 public static class BlogPostsOverview
 {
     public sealed record class Query() : IRequest<IReadOnlyCollection<ViewModel>>;
-    public sealed record class ViewModel(BlogPostId Id, string Title, uint Views, DateTimeOffset PostedAt, UserViewModel PostedBy);
-    public sealed record class UserViewModel(string Username, UserId UserId);
+    public sealed record class ViewModel(BlogPostId Id, string Title, uint Views, DateTimeOffset PostedAt, BloggerViewModel PostedBy);
+    public sealed record class BloggerViewModel(string Username, BloggerId BloggerId);
 
-    private static UserViewModel ToViewModel(this User user) =>
+    private static BloggerViewModel ToViewModel(this Blogger user) =>
          new(user.Username, user.Id);
 
-    private static ViewModel ToViewModelWithUser(this BlogPost blogPost, UserViewModel userViewModel) =>
-        new(blogPost.Id, blogPost.Title, blogPost.Views, blogPost.PostedAt, userViewModel);
+    private static ViewModel ToViewModelWithBlogger(this BlogPost blogPost, BloggerViewModel BloggerViewModel) =>
+        new(blogPost.Id, blogPost.Title, blogPost.Views, blogPost.PostedAt, BloggerViewModel);
 
     internal sealed class ViewBlogPostsQueryHandler : IRequestHandler<Query, IReadOnlyCollection<ViewModel>>
     {
         private readonly IGetBlogPosts _getBlogPosts;
-        private readonly IGetUser _getUser;
+        private readonly IGetBlogger _getBlogger;
 
-        public ViewBlogPostsQueryHandler(IGetBlogPosts getBlogPost, IGetUser getUser)
+        public ViewBlogPostsQueryHandler(IGetBlogPosts getBlogPost, IGetBlogger getUser)
         {
             _getBlogPosts = getBlogPost;
-            _getUser = getUser;
+            _getBlogger = getUser;
         }
 
         public async Task<IReadOnlyCollection<ViewModel>> Handle(Query request, CancellationToken cancellationToken)
@@ -32,11 +31,11 @@ public static class BlogPostsOverview
             var blogPosts = await _getBlogPosts.GetBlogPosts();
 
             var blogPostViewModels = new List<ViewModel>(blogPosts.Count);
-            var userViewModels = await _getUser.GetUsersByIds(blogPosts.Select(x => x.PostedBy).ToArray());
+            var BloggerViewModels = await _getBlogger.GetUsersByIds(blogPosts.Select(x => x.PostedBy).ToArray());
             foreach (var blogPost in blogPosts)
             {
-                var userViewModel = userViewModels.Single(u => blogPost.PostedBy == u.Id).ToViewModel();
-                var blogPostViewModel = blogPost.ToViewModelWithUser(userViewModel);
+                var BloggerViewModel = BloggerViewModels.Single(u => blogPost.PostedBy == u.Id).ToViewModel();
+                var blogPostViewModel = blogPost.ToViewModelWithBlogger(BloggerViewModel);
                 blogPostViewModels.Add(blogPostViewModel);
             }
             return blogPostViewModels;

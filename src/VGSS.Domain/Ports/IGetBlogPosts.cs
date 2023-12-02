@@ -1,4 +1,4 @@
-﻿using VGSS.Domain.BlogAggregate;
+﻿using VGSS.Domain.BloggerAggregate;
 
 namespace VGSS.Domain.Ports;
 public interface IGetBlogPosts

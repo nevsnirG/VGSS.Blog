@@ -1,20 +1,20 @@
 ﻿using VGSS.Domain.Ports;
-using VGSS.Domain.UserAggregate;
+using VGSS.Domain.BloggerAggregate;
 
 namespace VGSS.MockPersistence;
-internal sealed class GetUserImpl : IGetUser
+internal sealed class GetUserImpl : IGetBlogger
 {
-    public Task<User> GetByUserId(UserId userId)
+    public Task<Blogger> GetByBloggerId(BloggerId BloggerId)
     {
         return Task.FromResult(
-            SeedData.Users.SingleOrDefault(x => x.Id == userId) ?? User.New(new Username("Henk"))
+            (Blogger)(SeedData.Bloggers.SingleOrDefault(x => x.Id == BloggerId) ?? Blogger.New(new Username("Henk")))
             );
     }
 
-    public Task<IReadOnlyCollection<User>> GetUsersByIds(UserId[] ids)
+    public Task<IReadOnlyCollection<Blogger>> GetUsersByIds(BloggerId[] ids)
     {
         return Task.FromResult(
-            (IReadOnlyCollection<User>)SeedData.Users.Where(x => ids.Contains(x.Id)).ToList().AsReadOnly()
+            (IReadOnlyCollection<Blogger>)SeedData.Bloggers.Where(x => ids.Contains(x.Id)).ToList().AsReadOnly()
             );
     }
 }
