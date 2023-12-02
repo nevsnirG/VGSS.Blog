@@ -16,12 +16,7 @@ builder.Services.AddRazorComponents()
 builder.Services
     .AddAssembler(b => b.AddMicrosoftDependencyInjectionWiring())
     .AddApplication()
-    .AddMockPersistence()
-    .AddMediatR(c =>
-    {
-        c.AutoRegisterRequestProcessors = true;
-        c.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
-    });
+    .AddMockPersistence();
 
 builder.Services.Configure<StaticFileOptions>(options =>
 {
