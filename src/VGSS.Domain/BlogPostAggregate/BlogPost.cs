@@ -1,7 +1,7 @@
 ﻿using MinimalDomainEvents.Contract;
 using MinimalRichDomain.SourceGenerators;
-using VGSS.Domain.BloggerAggregate.Events;
-using VGSS.Domain.BloggerAggregate.ValueObjects;
+using VGSS.Domain.BlogPostAggregate.Events;
+using VGSS.Domain.BlogPostAggregate.ValueObjects;
 
 namespace VGSS.Domain.BloggerAggregate;
 [GenerateId]
@@ -32,14 +32,11 @@ public partial class BlogPost : Entity<BlogPostId>
         PostedAt = postedAt;
     }
 
-    internal static BlogPost New(BloggerId postedBy, Title title, Content content)
+    public static BlogPost New(BloggerId postedBy, Title title, Content content)
     {
-        return new(BlogPostId.New(), postedBy, title, content, 0, DateTimeOffset.UtcNow);
-    }
-
-    public static BlogPost Existing(BlogPostId blogPostId, BloggerId postedBy, Title title, Content content)
-    {
-        return new BlogPost(blogPostId, postedBy, title, content, 0, DateTimeOffset.UtcNow);
+        var blogPost = new BlogPost(BlogPostId.New(), postedBy, title, content, 0, DateTimeOffset.UtcNow);
+        blogPost.RaiseDomainEvent(new NewBlogPostPostedEvent(blogPost.Id, postedBy, blogPost.Title, blogPost.Content, blogPost.PostedAt));
+        return blogPost;
     }
 
     public void View(BloggerId viewedBy)

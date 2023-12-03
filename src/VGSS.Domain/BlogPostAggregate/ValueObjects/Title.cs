@@ -1,4 +1,4 @@
-﻿namespace VGSS.Domain.BloggerAggregate.ValueObjects;
+﻿namespace VGSS.Domain.BlogPostAggregate.ValueObjects;
 
 public sealed class Title : ValueObject
 {

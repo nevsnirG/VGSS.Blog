@@ -9,9 +9,7 @@ namespace VGSS.Domain.BloggerAggregate;
 public partial class Blogger : Entity<BloggerId>
 {
     public Username Username { get; private set; }
-    public IReadOnlyCollection<BlogPost> BlogPosts => _blogPosts.AsReadOnly();
 
-    private readonly List<BlogPost> _blogPosts = new();
 
 #pragma warning disable CS8618 // Rehydration validates invariants are correct.
     public Blogger(BloggerId id, IReadOnlyCollection<IDomainEvent> domainEvents) : base(id, domainEvents) { }
@@ -27,15 +25,5 @@ public partial class Blogger : Entity<BloggerId>
         var blogger = new Blogger(BloggerId.New(), username);
         DomainEventTracker.RaiseDomainEvent(new BloggerRegisteredEvent(blogger.Id, username));
         return blogger;
-    }
-
-    public BlogPost PostNewBlogPost(Title title, Content content)
-    {
-        var blogPost = BlogPost.New(Id, title, content);
-
-        _blogPosts.Add(blogPost);
-
-        RaiseDomainEvent(new NewBlogPostPostedEvent(blogPost.Id, Id, blogPost.Title, blogPost.Content, blogPost.PostedAt));
-        return blogPost;
     }
 }

@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using VGSS.Domain.Ports;
 using VGSS.Domain.BloggerAggregate;
-using VGSS.Domain.BloggerAggregate.Events;
+using VGSS.Domain.BlogPostAggregate.Events;
 
 namespace VGSS.Application;
 public static class ViewBlogPost

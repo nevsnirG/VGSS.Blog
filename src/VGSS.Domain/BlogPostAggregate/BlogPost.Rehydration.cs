@@ -1,4 +1,4 @@
-﻿using VGSS.Domain.BloggerAggregate.Events;
+﻿using VGSS.Domain.BlogPostAggregate.Events;
 
 namespace VGSS.Domain.BloggerAggregate;
 public partial class BlogPost : IApplyEvent<NewBlogPostPostedEvent>

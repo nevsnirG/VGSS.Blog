@@ -1,8 +1,7 @@
 ﻿using MediatR;
 using VGSS.Domain.BloggerAggregate;
-using VGSS.Domain.Ports;
-using VGSS.Domain.BloggerAggregate.Events;
-using VGSS.Domain.BloggerAggregate.ValueObjects;
+using VGSS.Domain.BlogPostAggregate.Events;
+using VGSS.Domain.BlogPostAggregate.ValueObjects;
 
 namespace VGSS.Application;
 public static class NewBlogPost
@@ -11,19 +10,13 @@ public static class NewBlogPost
 
     internal sealed class CreateNewBlogPostCommandHandler : IRequestHandler<CreateNewBlogPostCommand, BlogPost>
     {
-        private readonly IGetBlogger _getUser;
-
-        public CreateNewBlogPostCommandHandler(IGetBlogger getUser)
-        {
-            _getUser = getUser;
-        }
-
         public async Task<BlogPost> Handle(CreateNewBlogPostCommand request, CancellationToken cancellationToken)
         {
-            var user = await _getUser.GetByBloggerId(request.BloggerId);
             var title = new Title(request.Title);
             var content = new Content(request.Content);
-            return user.PostNewBlogPost(title, content);
+            var blogPost = BlogPost.New(request.BloggerId, title, content);
+            //TODO - Persist.
+            return blogPost;
         }
     }
 

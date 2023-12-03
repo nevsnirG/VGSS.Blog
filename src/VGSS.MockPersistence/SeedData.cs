@@ -2,6 +2,8 @@
 using VGSS.Domain.BloggerAggregate;
 using VGSS.Domain.BloggerAggregate.Events;
 using VGSS.Domain.BloggerAggregate.ValueObjects;
+using VGSS.Domain.BlogPostAggregate.Events;
+using VGSS.Domain.BlogPostAggregate.ValueObjects;
 
 namespace VGSS.MockPersistence;
 public static class SeedData
