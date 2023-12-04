@@ -5,7 +5,7 @@ public partial class Blogger : IApplyEvent<BloggerRegisteredEvent>
 {
     protected override void ValidateRehydration()
     {
-        if (Username is not null)
+        if (Username is null)
             throw new InvalidOperationException("Blogger rehydrated in corrupt state. Username is missing.");
     }
 
