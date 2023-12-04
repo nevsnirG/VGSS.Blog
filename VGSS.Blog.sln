@@ -33,6 +33,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssembleMe.MicrosoftDepende
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AssembleMe.Abstractions", "..\AssembleMe\AssembleMe.Abstractions\AssembleMe.Abstractions.csproj", "{02EBB9E4-AD69-4A49-BBF7-60C1C735667F}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinimalDomainEvents.Dispatcher", "..\MinimalDomainEvents\src\MinimalDomainEvents.Dispatcher\MinimalDomainEvents.Dispatcher.csproj", "{5ED04243-9A1D-427F-B9C1-FF2E3E7F5C30}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -95,6 +97,10 @@ Global
 		{02EBB9E4-AD69-4A49-BBF7-60C1C735667F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02EBB9E4-AD69-4A49-BBF7-60C1C735667F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02EBB9E4-AD69-4A49-BBF7-60C1C735667F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5ED04243-9A1D-427F-B9C1-FF2E3E7F5C30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5ED04243-9A1D-427F-B9C1-FF2E3E7F5C30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5ED04243-9A1D-427F-B9C1-FF2E3E7F5C30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5ED04243-9A1D-427F-B9C1-FF2E3E7F5C30}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -110,6 +116,7 @@ Global
 		{A993DA37-2184-4441-BC69-B97700EC3D2B} = {2F1C09DF-FF1B-4218-8476-FAEB9A44BE53}
 		{14E7152B-C594-4951-A3ED-CE0EE0BE84F2} = {2F1C09DF-FF1B-4218-8476-FAEB9A44BE53}
 		{02EBB9E4-AD69-4A49-BBF7-60C1C735667F} = {2F1C09DF-FF1B-4218-8476-FAEB9A44BE53}
+		{5ED04243-9A1D-427F-B9C1-FF2E3E7F5C30} = {2F1C09DF-FF1B-4218-8476-FAEB9A44BE53}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A1738640-0818-4EF1-B646-78BF498F07D5}

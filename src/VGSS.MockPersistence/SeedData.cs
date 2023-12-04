@@ -26,7 +26,6 @@ public static class SeedData
             var newBlogPostPostedEvent = new NewBlogPostPostedEvent(blogPostId, bloggerId, new Title("Title" + i), new Content("Content" + i), DateTimeOffset.UtcNow);
             _blogPosts.Add(blogPostId, new List<IDomainEvent> { newBlogPostPostedEvent });
 
-
             var user = new Blogger(bloggerId, _bloggers[bloggerId]);
             var blogPost = new BlogPost(blogPostId, _blogPosts[blogPostId]);
 
