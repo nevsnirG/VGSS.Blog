@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\MinimalDomainEvents\src\MinimalDomainEvents.Dispatcher.MediatR\MinimalDomainEvents.Dispatcher.MediatR.csproj" />
+    <ProjectReference Include="..\..\..\MinimalDomainEvents\src\MinimalDomainEvents.Dispatcher\MinimalDomainEvents.Dispatcher.csproj" />
     <ProjectReference Include="..\VGSS.Domain\VGSS.Domain.csproj" />
   </ItemGroup>
 

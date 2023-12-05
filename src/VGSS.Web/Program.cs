@@ -1,4 +1,4 @@
-using AssembleMe.MicrosoftDependencyInjection;
+using AssembleMe;
 using AutoWire.MicrosoftDependencyInjection;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Net.Http.Headers;
