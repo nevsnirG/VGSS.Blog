@@ -1,12 +1,11 @@
-﻿using MinimalDomainEvents.Contract;
-using MinimalDomainEvents.Core;
+﻿using MinimalDomainEvents.Core;
 
 namespace VGSS.Domain;
 public abstract class Entity<TId>
 {
     public IReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
     public TId Id { get; }
-
+    public int CurrentVersion { get; private set; }
     private readonly List<IDomainEvent> _domainEvents;
 
     protected Entity(TId id)
@@ -24,7 +23,7 @@ public abstract class Entity<TId>
 
     protected virtual void Rehydrate(IReadOnlyCollection<IDomainEvent> domainEvents)
     {
-        foreach (var @event in domainEvents)
+        foreach (var @event in domainEvents.OrderBy(de => de.Version))
         {
             Apply(@event);
         }
@@ -34,20 +33,39 @@ public abstract class Entity<TId>
 
     private void Apply(IDomainEvent @event)
     {
-        var eventType = @event.GetType();
-        var interfaceType = typeof(IApplyEvent<>).MakeGenericType(eventType);
+        if (CanApply(@event))
+        {
+            var eventType = @event.GetType();
+            var interfaceType = typeof(IApplyEvent<>).MakeGenericType(eventType);
 
-        var applyMethod = GetType().GetInterfaceMap(interfaceType).TargetMethods
-            .FirstOrDefault(m => m.Name.EndsWith(nameof(IApplyEvent<IDomainEvent>.Apply)));
+            var applyMethod = GetType().GetInterfaceMap(interfaceType).TargetMethods
+                .FirstOrDefault(m => m.Name.EndsWith(nameof(IApplyEvent<IDomainEvent>.Apply)));
 
-        applyMethod?.Invoke(this, new object[] { @event });
+            applyMethod?.Invoke(this, new object[] { @event });
+            IncrementVersion();
+        }
+        else
+            throw new InvalidOperationException($"Cannot apply event with version {@event.Version} to entity version {CurrentVersion}. Some history might be missing.");
+    }
+
+    private bool CanApply(IDomainEvent @event)
+    {
+        return @event.Version == CurrentVersion + 1;
     }
 
     protected abstract void ValidateRehydration();
 
     protected virtual void RaiseDomainEvent(IDomainEvent domainEvent)
     {
+        if (domainEvent.Version != CurrentVersion + 1)
+            throw new InvalidOperationException($"Cannot raise a domain event for version {domainEvent.Version} while entity version is {CurrentVersion}.");
+
         DomainEventTracker.RaiseDomainEvent(domainEvent);
         _domainEvents.Add(domainEvent);
+    }
+
+    private void IncrementVersion()
+    {
+        CurrentVersion++;
     }
 }

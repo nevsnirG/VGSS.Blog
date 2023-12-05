@@ -1,5 +1,4 @@
-﻿using MinimalDomainEvents.Contract;
-using MinimalDomainEvents.Core;
+﻿using MinimalDomainEvents.Core;
 using MinimalRichDomain.SourceGenerators;
 using VGSS.Domain.BloggerAggregate.Events;
 using VGSS.Domain.BloggerAggregate.ValueObjects;
@@ -23,7 +22,7 @@ public partial class Blogger : Entity<BloggerId>
     public static Blogger New(Username username)
     {
         var blogger = new Blogger(BloggerId.New(), username);
-        DomainEventTracker.RaiseDomainEvent(new BloggerRegisteredEvent(blogger.Id, username));
+        DomainEventTracker.RaiseDomainEvent(new BloggerRegisteredEvent(blogger.Id, username, blogger.CurrentVersion + 1));
         return blogger;
     }
 }

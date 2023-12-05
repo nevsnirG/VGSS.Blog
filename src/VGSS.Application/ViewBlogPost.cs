@@ -37,9 +37,9 @@ public static class ViewBlogPost
         }
     }
 
-    internal sealed class BlogPostViewedEventHandler : INotificationHandler<BlogPostViewed>
+    internal sealed class BlogPostViewedEventHandler : INotificationHandler<BlogPostViewedEvent>
     {
-        public Task Handle(BlogPostViewed notification, CancellationToken cancellationToken)
+        public Task Handle(BlogPostViewedEvent notification, CancellationToken cancellationToken)
         {
             Console.WriteLine($"User '{notification.ViewedBy.Value}' viewed your blog post!");
             return Task.CompletedTask;

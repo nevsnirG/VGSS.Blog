@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using MinimalDomainEvents.Dispatcher;
 using MinimalDomainEvents.Dispatcher.MediatR;
 
 namespace VGSS.Application;
@@ -9,10 +10,11 @@ public static class DependencyInjectionConfiguration
         return services
             .AddMediatR(c =>
             {
-                c.AutoRegisterRequestProcessors = true;
                 c.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
             })
-            .AddMediatorDispatcher()
+            .AddDomainEventDispatcher(b => 
+                b.AddMediatorDispatcher()
+            )
             ;
     }
 }

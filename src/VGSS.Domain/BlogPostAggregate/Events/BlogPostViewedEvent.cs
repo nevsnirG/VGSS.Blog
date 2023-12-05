@@ -1,6 +1,4 @@
-﻿using MediatR;
-using MinimalDomainEvents.Contract;
-using VGSS.Domain.BloggerAggregate;
+﻿using VGSS.Domain.BloggerAggregate;
 
 namespace VGSS.Domain.BlogPostAggregate.Events;
-public sealed record class BlogPostViewed(BlogPostId BlogPostId, BloggerId ViewedBy, DateTimeOffset ViewedAt) : IDomainEvent, INotification;
+public sealed record class BlogPostViewedEvent(BlogPostId BlogPostId, BloggerId ViewedBy, DateTimeOffset ViewedAt, int Version) : IDomainEvent;

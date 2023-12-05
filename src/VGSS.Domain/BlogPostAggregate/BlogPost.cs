@@ -1,5 +1,4 @@
-﻿using MinimalDomainEvents.Contract;
-using MinimalRichDomain.SourceGenerators;
+﻿using MinimalRichDomain.SourceGenerators;
 using VGSS.Domain.BlogPostAggregate.Events;
 using VGSS.Domain.BlogPostAggregate.ValueObjects;
 
@@ -35,13 +34,13 @@ public partial class BlogPost : Entity<BlogPostId>
     public static BlogPost New(BloggerId postedBy, Title title, Content content)
     {
         var blogPost = new BlogPost(BlogPostId.New(), postedBy, title, content, 0, DateTimeOffset.UtcNow);
-        blogPost.RaiseDomainEvent(new NewBlogPostPostedEvent(blogPost.Id, postedBy, blogPost.Title, blogPost.Content, blogPost.PostedAt));
+        blogPost.RaiseDomainEvent(new NewBlogPostPostedEvent(blogPost.Id, postedBy, blogPost.Title, blogPost.Content, blogPost.PostedAt, blogPost.CurrentVersion + 1));
         return blogPost;
     }
 
     public void View(BloggerId viewedBy)
     {
         Views++;
-        RaiseDomainEvent(new BlogPostViewed(Id, viewedBy, DateTimeOffset.UtcNow));
+        RaiseDomainEvent(new BlogPostViewedEvent(Id, viewedBy, DateTimeOffset.UtcNow, CurrentVersion + 1));
     }
 }

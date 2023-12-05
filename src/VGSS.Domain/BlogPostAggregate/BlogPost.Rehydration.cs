@@ -1,13 +1,13 @@
 ﻿using VGSS.Domain.BlogPostAggregate.Events;
 
 namespace VGSS.Domain.BloggerAggregate;
-public partial class BlogPost : IApplyEvent<NewBlogPostPostedEvent>
+public partial class BlogPost : IApplyEvent<NewBlogPostPostedEvent>, IApplyEvent<BlogPostViewedEvent>
 {
     protected override void ValidateRehydration()
     {
-        if(PostedBy == BloggerId.Empty)
+        if (PostedBy == BloggerId.Empty)
             throw new InvalidOperationException("Blogger rehydrated in corrupt state. BlogPostId is empty.");
-        if(PostedAt == DateTimeOffset.MinValue)
+        if (PostedAt == DateTimeOffset.MinValue)
             throw new InvalidOperationException("Blogger rehydrated in corrupt state. PostedAt is missing.");
         if (Title is null)
             throw new InvalidOperationException("Blogger rehydrated in corrupt state. Title is missing.");
@@ -22,5 +22,10 @@ public partial class BlogPost : IApplyEvent<NewBlogPostPostedEvent>
         Title = @event.Title;
         Content = @event.Content;
         Views = 0;
+    }
+
+    void IApplyEvent<BlogPostViewedEvent>.Apply(BlogPostViewedEvent @event)
+    {
+        Views++;
     }
 }
