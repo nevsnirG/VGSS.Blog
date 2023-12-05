@@ -6,6 +6,7 @@ public abstract class Entity<TId>
     public IReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
     public TId Id { get; }
     public int CurrentVersion { get; private set; }
+    protected int NextVersion => CurrentVersion + 1;
     private readonly List<IDomainEvent> _domainEvents;
 
     protected Entity(TId id)
@@ -50,14 +51,14 @@ public abstract class Entity<TId>
 
     private bool CanApply(IDomainEvent @event)
     {
-        return @event.Version == CurrentVersion + 1;
+        return @event.Version == NextVersion;
     }
 
     protected abstract void ValidateRehydration();
 
     protected virtual void RaiseDomainEvent(IDomainEvent domainEvent)
     {
-        if (domainEvent.Version != CurrentVersion + 1)
+        if (domainEvent.Version != NextVersion)
             throw new InvalidOperationException($"Cannot raise a domain event for version {domainEvent.Version} while entity version is {CurrentVersion}.");
 
         DomainEventTracker.RaiseDomainEvent(domainEvent);

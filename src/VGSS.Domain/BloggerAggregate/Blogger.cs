@@ -22,7 +22,7 @@ public partial class Blogger : Entity<BloggerId>
     public static Blogger New(Username username)
     {
         var blogger = new Blogger(BloggerId.New(), username);
-        DomainEventTracker.RaiseDomainEvent(new BloggerRegisteredEvent(blogger.Id, username, blogger.CurrentVersion + 1));
+        DomainEventTracker.RaiseDomainEvent(new BloggerRegisteredEvent(blogger.Id, username, 1));
         return blogger;
     }
 }
