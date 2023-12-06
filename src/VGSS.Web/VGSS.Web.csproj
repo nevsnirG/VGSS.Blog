@@ -7,9 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\AssembleMe\AssembleMe\AssembleMe.csproj" />
-    <ProjectReference Include="..\..\..\AutoWire\AutoWire.MicrosoftDependencyInjection\AutoWire.MicrosoftDependencyInjection.csproj" />
-    <ProjectReference Include="..\..\..\MinimalDomainEvents\src\MinimalDomainEvents.Dispatcher\MinimalDomainEvents.Dispatcher.csproj" />
+    <PackageReference Include="AssembleMe" Version="0.3.0-alpha" />
+    <PackageReference Include="AutoWire.MicrosoftDependencyInjection" Version="0.2.1-alpha" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\VGSS.Application\VGSS.Application.csproj" />
     <ProjectReference Include="..\VGSS.MockPersistence\VGSS.MockPersistence.csproj" />
   </ItemGroup>

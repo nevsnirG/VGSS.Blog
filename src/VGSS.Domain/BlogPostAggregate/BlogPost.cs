@@ -22,12 +22,12 @@ public partial class BlogPost : Entity<BlogPostId>
     {
         var blogPost = new BlogPost();
         var domainEvent = new NewBlogPostPostedEvent(blogPost.Id, postedBy, title, content, DateTimeOffset.UtcNow, blogPost.NextVersion);
-        blogPost.RaiseAndApplyDomainEvent(domainEvent);
+        blogPost.RaiseDomainEvent(domainEvent);
         return blogPost;
     }
 
     public void View(BloggerId viewedBy)
     {
-        RaiseAndApplyDomainEvent(new BlogPostViewedEvent(Id, viewedBy, DateTimeOffset.UtcNow, NextVersion));
+        RaiseDomainEvent(new BlogPostViewedEvent(Id, viewedBy, DateTimeOffset.UtcNow, NextVersion));
     }
 }

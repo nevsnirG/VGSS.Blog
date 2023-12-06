@@ -8,11 +8,11 @@
 
   <ItemGroup>
     <PackageReference Include="MediatR" Version="12.2.0" />
+    <PackageReference Include="MinimalDomainEvents.Dispatcher" Version="0.3.0-alpha" />
+    <PackageReference Include="MinimalDomainEvents.Dispatcher.MediatR" Version="0.1.4-alpha" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\MinimalDomainEvents\src\MinimalDomainEvents.Dispatcher.MediatR\MinimalDomainEvents.Dispatcher.MediatR.csproj" />
-    <ProjectReference Include="..\..\..\MinimalDomainEvents\src\MinimalDomainEvents.Dispatcher\MinimalDomainEvents.Dispatcher.csproj" />
     <ProjectReference Include="..\VGSS.Domain\VGSS.Domain.csproj" />
   </ItemGroup>
 

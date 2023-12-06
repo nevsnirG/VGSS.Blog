@@ -8,13 +8,8 @@
 
 	<ItemGroup>
 		<PackageReference Include="MediatR.Contracts" Version="2.0.1" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<ProjectReference Include="..\..\..\MinimalDomainEvents\src\MinimalDomainEvents.Core\MinimalDomainEvents.Core.csproj" />
-		<ProjectReference Include="..\..\..\MinimalRichDomain\src\MinimalRichDomain.SourceGenerators\MinimalRichDomain.SourceGenerators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
-		<ProjectReference Include="..\..\..\MinimalRichDomain\src\MinimalRichDomain.SourceGenerators\MinimalRichDomain.SourceGenerators.csproj" />
-		<ProjectReference Include="..\..\..\MinimalRichDomain\src\MinimalRichDomain\MinimalRichDomain.csproj" />
+		<PackageReference Include="MinimalRichDomain" Version="0.1.1-alpha" />
+		<PackageReference Include="MinimalRichDomain.SourceGenerators" Version="0.1.7-alpha" />
 	</ItemGroup>
 
 </Project>

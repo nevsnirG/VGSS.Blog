@@ -17,7 +17,7 @@ public partial class Blogger : Entity<BloggerId>
     public static Blogger New(Username username)
     {
         var blogger = new Blogger();
-        blogger.RaiseAndApplyDomainEvent(new BloggerRegisteredEvent(blogger.Id, username, 1));
+        blogger.RaiseDomainEvent(new BloggerRegisteredEvent(blogger.Id, username, 1));
         return blogger;
     }
 }
