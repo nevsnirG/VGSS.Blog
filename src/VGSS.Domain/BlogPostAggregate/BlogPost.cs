@@ -14,32 +14,20 @@ public partial class BlogPost : Entity<BlogPostId>
 
 #pragma warning disable CS8618 // Rehydration validates invariants are correct.
     public BlogPost(BlogPostId id, IReadOnlyCollection<IDomainEvent> domainEvents) : base(id, domainEvents) { }
-#pragma warning restore CS8618
 
-    private BlogPost(BlogPostId key,
-                     BloggerId postedBy,
-                     Title title,
-                     Content content,
-                     uint views,
-                     DateTimeOffset postedAt)
-        : base(key)
-    {
-        PostedBy = postedBy;
-        Title = title;
-        Content = content;
-        Views = views;
-        PostedAt = postedAt;
-    }
+    private BlogPost() : base(BlogPostId.New()) { }
+#pragma warning restore CS8618
 
     public static BlogPost New(BloggerId postedBy, Title title, Content content)
     {
-        var blogPost = new BlogPost(BlogPostId.New(), postedBy, title, content, 0, DateTimeOffset.UtcNow);
-        blogPost.RaiseDomainEvent(new NewBlogPostPostedEvent(blogPost.Id, postedBy, blogPost.Title, blogPost.Content, blogPost.PostedAt, 1));
+        var blogPost = new BlogPost();
+        var domainEvent = new NewBlogPostPostedEvent(blogPost.Id, postedBy, title, content, DateTimeOffset.UtcNow, blogPost.NextVersion);
+        blogPost.RaiseAndApplyDomainEvent(domainEvent);
         return blogPost;
     }
 
     public void View(BloggerId viewedBy)
     {
-        RaiseDomainEvent(new BlogPostViewedEvent(Id, viewedBy, DateTimeOffset.UtcNow, NextVersion));
+        RaiseAndApplyDomainEvent(new BlogPostViewedEvent(Id, viewedBy, DateTimeOffset.UtcNow, NextVersion));
     }
 }
