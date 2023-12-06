@@ -1,4 +1,6 @@
-﻿namespace VGSS.Domain.BlogPostAggregate.ValueObjects;
+﻿using MinimalRichDomain;
+
+namespace VGSS.Domain.BlogPostAggregate.ValueObjects;
 
 public sealed class Content : ValueObject
 {

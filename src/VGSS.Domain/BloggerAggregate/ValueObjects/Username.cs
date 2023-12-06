@@ -1,4 +1,6 @@
-﻿namespace VGSS.Domain.BloggerAggregate.ValueObjects;
+﻿using MinimalRichDomain;
+
+namespace VGSS.Domain.BloggerAggregate.ValueObjects;
 public sealed class Username : ValueObject
 {
     public string Value { get; }

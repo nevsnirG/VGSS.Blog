@@ -1,5 +1,5 @@
 ﻿using MinimalDomainEvents.Core;
-using MinimalRichDomain.SourceGenerators;
+using MinimalRichDomain;
 using VGSS.Domain.BloggerAggregate.Events;
 using VGSS.Domain.BloggerAggregate.ValueObjects;
 

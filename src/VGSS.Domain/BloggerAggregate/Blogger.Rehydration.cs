@@ -1,4 +1,5 @@
-﻿using VGSS.Domain.BloggerAggregate.Events;
+﻿using MinimalRichDomain;
+using VGSS.Domain.BloggerAggregate.Events;
 
 namespace VGSS.Domain.BloggerAggregate;
 public partial class Blogger : IApplyEvent<BloggerRegisteredEvent>

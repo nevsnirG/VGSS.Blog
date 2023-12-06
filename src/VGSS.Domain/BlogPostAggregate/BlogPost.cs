@@ -1,4 +1,4 @@
-﻿using MinimalRichDomain.SourceGenerators;
+﻿using MinimalRichDomain;
 using VGSS.Domain.BlogPostAggregate.Events;
 using VGSS.Domain.BlogPostAggregate.ValueObjects;
 
