@@ -40,7 +40,6 @@ public partial class BlogPost : Entity<BlogPostId>
 
     public void View(BloggerId viewedBy)
     {
-        Views++;
         RaiseDomainEvent(new BlogPostViewedEvent(Id, viewedBy, DateTimeOffset.UtcNow, NextVersion));
     }
 }
