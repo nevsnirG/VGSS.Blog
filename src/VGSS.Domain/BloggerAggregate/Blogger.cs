@@ -4,7 +4,7 @@ using VGSS.Domain.BloggerAggregate.ValueObjects;
 
 namespace VGSS.Domain.BloggerAggregate;
 [GenerateId]
-public partial class Blogger : Entity<BloggerId>
+public partial class Blogger : AggregateRoot<BloggerId>
 {
     public Username Username { get; private set; }
 
@@ -17,7 +17,7 @@ public partial class Blogger : Entity<BloggerId>
     public static Blogger New(Username username)
     {
         var blogger = new Blogger();
-        blogger.RaiseDomainEvent(new BloggerRegisteredEvent(blogger.Id, username, 1));
+        blogger.RaiseAndApplyDomainEvent(new BloggerRegisteredEvent(blogger.Id, username, 1));
         return blogger;
     }
 }

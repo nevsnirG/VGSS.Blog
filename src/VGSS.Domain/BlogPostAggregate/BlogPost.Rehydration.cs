@@ -4,16 +4,16 @@ using VGSS.Domain.BlogPostAggregate.Events;
 namespace VGSS.Domain.BloggerAggregate;
 public partial class BlogPost : IApplyEvent<NewBlogPostPostedEvent>, IApplyEvent<BlogPostViewedEvent>
 {
-    protected override void ValidateRehydration()
+    protected override void ValidateState()
     {
         if (PostedBy == BloggerId.Empty)
-            throw new InvalidOperationException("Blogger rehydrated in corrupt state. BlogPostId is empty.");
+            throw new InvalidOperationException("BlogPost is in a corrupt state. BlogPostId is empty.");
         if (PostedAt == DateTimeOffset.MinValue)
-            throw new InvalidOperationException("Blogger rehydrated in corrupt state. PostedAt is missing.");
+            throw new InvalidOperationException("BlogPost is in a corrupt state. PostedAt is missing.");
         if (Title is null)
-            throw new InvalidOperationException("Blogger rehydrated in corrupt state. Title is missing.");
+            throw new InvalidOperationException("BlogPost is in a corrupt state. Title is missing.");
         if (Content is null)
-            throw new InvalidOperationException("Blogger rehydrated in corrupt state. PostedAt is missing.");
+            throw new InvalidOperationException("BlogPost is in a corrupt state. PostedAt is missing.");
     }
 
     void IApplyEvent<NewBlogPostPostedEvent>.Apply(NewBlogPostPostedEvent @event)

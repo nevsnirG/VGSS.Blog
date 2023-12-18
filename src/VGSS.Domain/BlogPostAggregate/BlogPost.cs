@@ -4,7 +4,7 @@ using VGSS.Domain.BlogPostAggregate.ValueObjects;
 
 namespace VGSS.Domain.BloggerAggregate;
 [GenerateId]
-public partial class BlogPost : Entity<BlogPostId>
+public partial class BlogPost : AggregateRoot<BlogPostId>
 {
     public BloggerId PostedBy { get; private set; }
     public Title Title { get; private set; }
@@ -22,12 +22,12 @@ public partial class BlogPost : Entity<BlogPostId>
     {
         var blogPost = new BlogPost();
         var domainEvent = new NewBlogPostPostedEvent(blogPost.Id, postedBy, title, content, DateTimeOffset.UtcNow, blogPost.NextVersion);
-        blogPost.RaiseDomainEvent(domainEvent);
+        blogPost.RaiseAndApplyDomainEvent(domainEvent);
         return blogPost;
     }
 
     public void View(BloggerId viewedBy)
     {
-        RaiseDomainEvent(new BlogPostViewedEvent(Id, viewedBy, DateTimeOffset.UtcNow, NextVersion));
+        RaiseAndApplyDomainEvent(new BlogPostViewedEvent(Id, viewedBy, DateTimeOffset.UtcNow, NextVersion));
     }
 }
