@@ -65,6 +65,7 @@ public class BloggerScenarioTests(BloggerAggregateStateFixture fixture) : IClass
             .Which.Should().BeEquivalentTo(
                 new
                 {
+                    blogPost.Id,
                     PostedBy = blogger.Id,
                     Content = content,
                     Title = title,
@@ -90,13 +91,49 @@ public class BloggerScenarioTests(BloggerAggregateStateFixture fixture) : IClass
         blogPost.Views.Should().Be(1);
         blogPost.CurrentVersion.Should().Be(2);
         blogPost.DomainEvents.Should().HaveCount(2);
-        blogPost.DomainEvents.Last().Should().BeEquivalentTo(
+        blogPost.DomainEvents.Last()
+            .Should().BeOfType<BlogPostViewedEvent>()
+            .Which.Should().BeEquivalentTo(
                 new
                 {
-                    BlogPostId = blogPost.Id,
+                    blogPost.Id,
                     ViewedBy = blogger.Id,
                     ViewedAt = DateTimeOffset.UtcNow,
                     Version = 2
+                }, options => options.Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromSeconds(1))).WhenTypeIs<DateTimeOffset>()
+            );
+
+        ValidateRehydration<BlogPost>(blogPost.Id, blogPost.DomainEvents);
+    }
+
+    [Fact(DisplayName = "400 After viewing the new blogpost, the registered user edits the blogpost"), TestPriority(300)]
+    public void AfterViewing_EditsBlogPost()
+    {
+        var blogger = fixture.Blogger!;
+        var blogPost = fixture.BlogPosts.Single();
+
+        var newTitle = new Title("new title");
+        var newContent = new Content("new content");
+        blogPost.Edit(blogger.Id, newTitle, newContent);
+
+        blogPost.Views.Should().Be(1);
+        blogPost.Title.Should().NotBeNull();
+        blogPost.Title.Value.Should().Be("new title");
+        blogPost.Content.Should().NotBeNull();
+        blogPost.Content.Value.Should().Be("new content");
+        blogPost.CurrentVersion.Should().Be(3);
+        blogPost.DomainEvents.Should().HaveCount(3);
+        blogPost.DomainEvents.Last()
+            .Should().BeOfType<BlogPostEditedEvent>()
+            .Which.Should().BeEquivalentTo(
+                new
+                {
+                    blogPost.Id,
+                    EditedBy = blogger.Id,
+                    EditedAt = DateTimeOffset.UtcNow,
+                    NewTitle = newTitle,
+                    NewContent = newContent,
+                    Version = 3
                 }, options => options.Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromSeconds(1))).WhenTypeIs<DateTimeOffset>()
             );
 
