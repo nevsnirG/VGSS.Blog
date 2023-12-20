@@ -1,5 +1,6 @@
 using VGSS.Domain.BloggerAggregate;
 using VGSS.Domain.BloggerAggregate.ValueObjects;
+using VGSS.Domain.BlogPostAggregate.Events;
 using VGSS.Domain.BlogPostAggregate.ValueObjects;
 using VGSS.TestCommon;
 
@@ -42,6 +43,19 @@ public class BloggerScenarioTests(BloggerAggregateStateFixture fixture) : IClass
         blogPost.Title.Value.Should().Be("test title");
         blogPost.Content.Should().NotBeNull();
         blogPost.Content.Value.Should().Be("test content");
+        blogPost.CurrentVersion.Should().Be(1);
+        blogPost.DomainEvents.Should().ContainSingle("because the blog has just been posted")
+            .Which.Should().BeOfType<NewBlogPostPostedEvent>()
+            .Which.Should().BeEquivalentTo(
+                new
+                {
+                    PostedBy = blogger.Id,
+                    Content = content,
+                    Title = title,
+                    PostedAt = DateTimeOffset.UtcNow
+                },
+                options => options.Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromSeconds(1))).WhenTypeIs<DateTimeOffset>()
+            );
 
         fixture.BlogPosts.Add(blogPost);
     }
