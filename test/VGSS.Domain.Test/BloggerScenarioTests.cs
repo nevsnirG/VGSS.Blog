@@ -52,7 +52,8 @@ public class BloggerScenarioTests(BloggerAggregateStateFixture fixture) : IClass
                     PostedBy = blogger.Id,
                     Content = content,
                     Title = title,
-                    PostedAt = DateTimeOffset.UtcNow
+                    PostedAt = DateTimeOffset.UtcNow,
+                    Version = 1
                 },
                 options => options.Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromSeconds(1))).WhenTypeIs<DateTimeOffset>()
             );
