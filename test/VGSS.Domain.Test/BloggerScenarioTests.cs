@@ -11,7 +11,7 @@ public class BloggerAggregateStateFixture
 }
 
 [TestCaseOrderer("VGSS.TestCommon.PriorityOrderer", "VGSS.TestCommon")]
-public class ScenarioTests(BloggerAggregateStateFixture fixture) : IClassFixture<BloggerAggregateStateFixture>
+public class BloggerScenarioTests(BloggerAggregateStateFixture fixture) : IClassFixture<BloggerAggregateStateFixture>
 {
     [Fact, TestPriority(0)]
     public void RegisterNewBlogger()
