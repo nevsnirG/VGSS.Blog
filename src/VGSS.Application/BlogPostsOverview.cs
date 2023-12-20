@@ -15,23 +15,14 @@ public static class BlogPostsOverview
     private static ViewModel ToViewModelWithBlogger(this BlogPost blogPost, BloggerViewModel BloggerViewModel) =>
         new(blogPost.Id, blogPost.Title, blogPost.Views, blogPost.PostedAt, BloggerViewModel);
 
-    internal sealed class ViewBlogPostsQueryHandler : IRequestHandler<Query, IReadOnlyCollection<ViewModel>>
+    internal sealed class ViewBlogPostsQueryHandler(IBlogPostRepository blogPostRepository, IBloggerRepository bloggerRepository) : IRequestHandler<Query, IReadOnlyCollection<ViewModel>>
     {
-        private readonly IGetBlogPosts _getBlogPosts;
-        private readonly IGetBlogger _getBlogger;
-
-        public ViewBlogPostsQueryHandler(IGetBlogPosts getBlogPost, IGetBlogger getUser)
-        {
-            _getBlogPosts = getBlogPost;
-            _getBlogger = getUser;
-        }
-
         public async Task<IReadOnlyCollection<ViewModel>> Handle(Query request, CancellationToken cancellationToken)
         {
-            var blogPosts = await _getBlogPosts.GetBlogPosts();
+            var blogPosts = await blogPostRepository.GetAll();
 
             var blogPostViewModels = new List<ViewModel>(blogPosts.Count);
-            var BloggerViewModels = await _getBlogger.GetUsersByIds(blogPosts.Select(x => x.PostedBy).ToArray());
+            var BloggerViewModels = await bloggerRepository.GetByIds(blogPosts.Select(x => x.PostedBy).ToArray());
             foreach (var blogPost in blogPosts)
             {
                 var BloggerViewModel = BloggerViewModels.Single(u => blogPost.PostedBy == u.Id).ToViewModel();

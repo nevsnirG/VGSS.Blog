@@ -17,10 +17,10 @@ public static class ViewBlogPost
 
     internal sealed class ViewBlogPostQueryHandler : IRequestHandler<Query, ViewModel>
     {
-        private readonly IGetBlogPosts _getBlogPost;
-        private readonly IGetBlogger _getUser;
+        private readonly IBlogPostRepository _getBlogPost;
+        private readonly IBloggerRepository _getUser;
 
-        public ViewBlogPostQueryHandler(IGetBlogPosts getBlogPost, IGetBlogger getUser)
+        public ViewBlogPostQueryHandler(IBlogPostRepository getBlogPost, IBloggerRepository getUser)
         {
             _getBlogPost = getBlogPost;
             _getUser = getUser;
@@ -28,10 +28,10 @@ public static class ViewBlogPost
 
         public async Task<ViewModel> Handle(Query request, CancellationToken cancellationToken)
         {
-            var blogPost = await _getBlogPost.GetBlogPostById(request.BlogPostId);
+            var blogPost = await _getBlogPost.GetById(request.BlogPostId);
             blogPost.View(BloggerId.Empty);
 
-            var user = await _getUser.GetByBloggerId(blogPost.PostedBy);
+            var user = await _getUser.GetById(blogPost.PostedBy);
             var blogPostViewModel = blogPost.ToViewModelWithUser(user.ToViewModel());
             return blogPostViewModel;
         }
