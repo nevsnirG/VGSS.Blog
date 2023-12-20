@@ -13,7 +13,7 @@ public partial class BlogPost : AggregateRoot<BlogPostId>
     public uint Views { get; private set; }
 
 #pragma warning disable CS8618 // Rehydration validates invariants are correct.
-    public BlogPost(BlogPostId id, IReadOnlyCollection<IDomainEvent> domainEvents) : base(id, domainEvents) { }
+    public BlogPost(BlogPostId id, IReadOnlyCollection<MinimalRichDomain.IDomainEvent> domainEvents) : base(id, domainEvents) { }
 
     private BlogPost() : base(BlogPostId.New()) { }
 #pragma warning restore CS8618

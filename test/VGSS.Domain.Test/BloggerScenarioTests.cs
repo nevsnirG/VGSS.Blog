@@ -1,8 +1,10 @@
 using VGSS.Domain.BloggerAggregate;
+using VGSS.Domain.BloggerAggregate.Events;
 using VGSS.Domain.BloggerAggregate.ValueObjects;
 using VGSS.Domain.BlogPostAggregate.Events;
 using VGSS.Domain.BlogPostAggregate.ValueObjects;
 using VGSS.TestCommon;
+using static VGSS.TestCommon.ValidationHelper;
 
 namespace VGSS.Domain.Test;
 public class BloggerAggregateStateFixture
@@ -14,7 +16,7 @@ public class BloggerAggregateStateFixture
 [TestCaseOrderer("VGSS.TestCommon.PriorityOrderer", "VGSS.TestCommon")]
 public class BloggerScenarioTests(BloggerAggregateStateFixture fixture) : IClassFixture<BloggerAggregateStateFixture>
 {
-    [Fact, TestPriority(100)]
+    [Fact(DisplayName = "100 Register new user"), TestPriority(100)]
     public void RegisterNewBlogger()
     {
         var username = new Username("test username");
@@ -24,11 +26,25 @@ public class BloggerScenarioTests(BloggerAggregateStateFixture fixture) : IClass
         blogger.Should().NotBeNull();
         blogger.Username.Should().NotBeNull();
         blogger.Username.Value.Should().Be("test username");
+        blogger.CurrentVersion.Should().Be(1);
+        blogger.DomainEvents.Should().ContainSingle()
+            .Which.Should().BeOfType<BloggerRegisteredEvent>()
+            .Which.Should().BeEquivalentTo(
+                new
+                {
+                    BloggerId = blogger.Id,
+                    Version = 1,
+                    Username = username,
+                    RegisteredAt = DateTimeOffset.UtcNow
+                }, options => options.Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromSeconds(1))).WhenTypeIs<DateTimeOffset>()
+            );
+
+        ValidateRehydration<Blogger>(blogger.Id, blogger.DomainEvents);
 
         fixture.Blogger = blogger;
     }
 
-    [Fact, TestPriority(200)]
+    [Fact(DisplayName = "200 After registering, post a new blogpost"), TestPriority(200)]
     public void AfterRegistering_PostsNewBlogPost()
     {
         var blogger = fixture.Blogger!;
@@ -58,10 +74,12 @@ public class BloggerScenarioTests(BloggerAggregateStateFixture fixture) : IClass
                 options => options.Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromSeconds(1))).WhenTypeIs<DateTimeOffset>()
             );
 
+        ValidateRehydration<BlogPost>(blogPost.Id, blogPost.DomainEvents);
+
         fixture.BlogPosts.Add(blogPost);
     }
 
-    [Fact, TestPriority(300)]
+    [Fact(DisplayName = "300 After posting a new blog post, view the posted blog post"), TestPriority(300)]
     public void AfterPosting_ViewsBlogPost()
     {
         var blogger = fixture.Blogger!;
@@ -71,5 +89,17 @@ public class BloggerScenarioTests(BloggerAggregateStateFixture fixture) : IClass
 
         blogPost.Views.Should().Be(1);
         blogPost.CurrentVersion.Should().Be(2);
+        blogPost.DomainEvents.Should().HaveCount(2);
+        blogPost.DomainEvents.Last().Should().BeEquivalentTo(
+                new
+                {
+                    BlogPostId = blogPost.Id,
+                    ViewedBy = blogger.Id,
+                    ViewedAt = DateTimeOffset.UtcNow,
+                    Version = 2
+                }, options => options.Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromSeconds(1))).WhenTypeIs<DateTimeOffset>()
+            );
+
+        ValidateRehydration<BlogPost>(blogPost.Id, blogPost.DomainEvents);
     }
 }
