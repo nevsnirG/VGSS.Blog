@@ -8,7 +8,7 @@ internal sealed class BloggerRepositoryMock : IBloggerRepository
     public Task<Blogger> GetById(BloggerId BloggerId)
     {
         return Task.FromResult(
-            (Blogger)(SeedData.Bloggers.SingleOrDefault(x => x.Id == BloggerId) ?? Blogger.New(new Username("Henk")))
+            (Blogger)(SeedData.Bloggers.SingleOrDefault(x => x.Id == BloggerId) ?? Blogger.Register(new Username("Henk")))
             );
     }
 

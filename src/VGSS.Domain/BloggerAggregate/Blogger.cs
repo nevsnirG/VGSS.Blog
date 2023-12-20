@@ -16,7 +16,7 @@ public partial class Blogger : AggregateRoot<BloggerId>
     private Blogger() : base(BloggerId.New()) { }
 #pragma warning restore CS8618
 
-    public static Blogger New(Username username)
+    public static Blogger Register(Username username)
     {
         var blogger = new Blogger();
         blogger.RaiseAndApplyDomainEvent(new BloggerRegisteredEvent(blogger.Id, username, 1));
