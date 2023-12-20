@@ -13,7 +13,7 @@ public class BloggerAggregateStateFixture
 [TestCaseOrderer("VGSS.TestCommon.PriorityOrderer", "VGSS.TestCommon")]
 public class BloggerScenarioTests(BloggerAggregateStateFixture fixture) : IClassFixture<BloggerAggregateStateFixture>
 {
-    [Fact, TestPriority(0)]
+    [Fact, TestPriority(100)]
     public void RegisterNewBlogger()
     {
         var username = new Username("test username");
@@ -27,8 +27,8 @@ public class BloggerScenarioTests(BloggerAggregateStateFixture fixture) : IClass
         fixture.Blogger = blogger;
     }
 
-    [Fact, TestPriority(1)]
-    public void RegisteredUser_PostsNewBlogPost()
+    [Fact, TestPriority(200)]
+    public void AfterRegistering_PostsNewBlogPost()
     {
         var blogger = fixture.Blogger!;
 
@@ -43,7 +43,18 @@ public class BloggerScenarioTests(BloggerAggregateStateFixture fixture) : IClass
         blogPost.Content.Should().NotBeNull();
         blogPost.Content.Value.Should().Be("test content");
 
-        fixture.Blogger = blogger;
         fixture.BlogPosts.Add(blogPost);
+    }
+
+    [Fact, TestPriority(300)]
+    public void AfterPosting_ViewsBlogPost()
+    {
+        var blogger = fixture.Blogger!;
+        var blogPost = fixture.BlogPosts.Single();
+
+        blogPost.View(blogger.Id);
+
+        blogPost.Views.Should().Be(1);
+        blogPost.CurrentVersion.Should().Be(2);
     }
 }
