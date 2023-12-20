@@ -1,3 +1,4 @@
+using System.Text.Json;
 using VGSS.Domain.BloggerAggregate;
 using VGSS.Domain.BloggerAggregate.Events;
 using VGSS.Domain.BloggerAggregate.ValueObjects;
@@ -7,14 +8,30 @@ using VGSS.TestCommon;
 using static VGSS.TestCommon.ValidationHelper;
 
 namespace VGSS.Domain.Test;
-public class BloggerAggregateStateFixture
+public class BloggerScenarioFixture
 {
     public Blogger? Blogger { get; set; }
-    public List<BlogPost> BlogPosts { get; } = [];
+    public List<BlogPost> BlogPosts { get; private set; } = [];
+
+    public void Persist(int priority)
+    {
+        var statesDirectory = GetStatesDirectory();
+        Directory.CreateDirectory(statesDirectory);
+        var fileName = Path.Combine(statesDirectory, $"{priority}.json");
+        var stateAsJson = JsonSerializer.Serialize(this);
+        File.WriteAllText(fileName, stateAsJson);
+    }
+
+    private string GetStatesDirectory()
+    {
+        var projectDir = Directory.GetParent(Environment.CurrentDirectory)!.Parent!.Parent!.FullName;
+        var statesDirectory = Path.Combine(projectDir, "States");
+        return statesDirectory;
+    }
 }
 
 [TestCaseOrderer("VGSS.TestCommon.PriorityOrderer", "VGSS.TestCommon")]
-public class BloggerScenarioTests(BloggerAggregateStateFixture fixture) : IClassFixture<BloggerAggregateStateFixture>
+public class BloggerScenarioTests(BloggerScenarioFixture fixture) : IClassFixture<BloggerScenarioFixture>
 {
     [Fact(DisplayName = "100 Register new user"), TestPriority(100)]
     public void RegisterNewBlogger()
@@ -42,6 +59,7 @@ public class BloggerScenarioTests(BloggerAggregateStateFixture fixture) : IClass
         ValidateRehydration<Blogger>(blogger.Id, blogger.DomainEvents);
 
         fixture.Blogger = blogger;
+        fixture.Persist(100);
     }
 
     [Fact(DisplayName = "200 After registering, post a new blogpost"), TestPriority(200)]
@@ -78,6 +96,7 @@ public class BloggerScenarioTests(BloggerAggregateStateFixture fixture) : IClass
         ValidateRehydration<BlogPost>(blogPost.Id, blogPost.DomainEvents);
 
         fixture.BlogPosts.Add(blogPost);
+        fixture.Persist(200);
     }
 
     [Fact(DisplayName = "300 After posting a new blog post, view the posted blog post"), TestPriority(300)]
@@ -104,6 +123,7 @@ public class BloggerScenarioTests(BloggerAggregateStateFixture fixture) : IClass
             );
 
         ValidateRehydration<BlogPost>(blogPost.Id, blogPost.DomainEvents);
+        fixture.Persist(300);
     }
 
     [Fact(DisplayName = "400 After viewing the new blogpost, the registered user edits the blogpost"), TestPriority(300)]
@@ -138,5 +158,6 @@ public class BloggerScenarioTests(BloggerAggregateStateFixture fixture) : IClass
             );
 
         ValidateRehydration<BlogPost>(blogPost.Id, blogPost.DomainEvents);
+        fixture.Persist(400);
     }
 }
