@@ -6,7 +6,7 @@ using VGSS.Domain.BlogPostAggregate.ValueObjects;
 using VGSS.TestCommon;
 using static VGSS.TestCommon.ValidationHelper;
 
-namespace VGSS.Domain.Test;
+namespace VGSS.Domain.Test.Scenarios;
 public class BloggerScenarioFixture : ScenarioFixtureBase
 {
     public Blogger? Blogger { get; set; }
