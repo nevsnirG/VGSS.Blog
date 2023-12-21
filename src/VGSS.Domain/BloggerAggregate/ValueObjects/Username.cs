@@ -5,16 +5,22 @@ public sealed class Username : ValueObject
 {
     public string Value { get; }
 
-    public Username(string value)
+    private Username(string value)
+    {
+        Value = value;
+    }
+
+    public static Result<Username?> Create(string? value)
     {
         if (string.IsNullOrWhiteSpace(value))
-            throw new ArgumentNullException(nameof(value));
+            return Result.Fail<Username?>("Username can not be empty.");
         if (value.Length < 3)
-            throw new ArgumentOutOfRangeException(nameof(value), "Username can not be shorter than 3 characters.");
+            return Result.Fail<Username?>("Username can not be shorter than 3 characters.");
         if (value.Length > 128)
-            throw new ArgumentOutOfRangeException(nameof(value), "Username can not be longer than 128 characters.");
+            return Result.Fail<Username?>("Username can not be longer than 128 characters.");
 
-        Value = value;
+        var username = new Username(value);
+        return Result.Success(username);
     }
 
     protected override IEnumerable<object> GetEqualityComponents()

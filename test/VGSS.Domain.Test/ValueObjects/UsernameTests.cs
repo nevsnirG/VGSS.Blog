@@ -10,15 +10,21 @@ public class UsernameTests
     [InlineData("   ")]
     public void CanNotBeNullOrWhiteSpace(string? value)
     {
-        FluentActions.Invoking(() => new Username(value!)).Should().ThrowExactly<ArgumentNullException>();
+        var result = Username.Create(value);
+
+        result.IsSuccess.Should().BeFalse();
+        result.Reason.Should().Be("Username can not be empty.");
     }
 
     [Theory]
     [InlineData("1")]
     [InlineData("12")]
-    public void CanNotBeShorterThan3Characters(string value )
+    public void CanNotBeShorterThan3Characters(string value)
     {
-        FluentActions.Invoking(() => new Username(value)).Should().ThrowExactly<ArgumentOutOfRangeException>().WithMessage("Username can not be shorter than 3 characters.*", "usernames can not be shorter than 3 characters");
+        var result = Username.Create(value);
+
+        result.IsSuccess.Should().BeFalse();
+        result.Reason.Should().Be("Username can not be shorter than 3 characters.");
     }
 
     [Fact]
@@ -26,6 +32,9 @@ public class UsernameTests
     {
         var value = "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789";
 
-        FluentActions.Invoking(() => new Username(value)).Should().ThrowExactly<ArgumentOutOfRangeException>().WithMessage("Username can not be longer than 128 characters.*", "usernames can not be longer than 128 characters");
+        var result = Username.Create(value);
+
+        result.IsSuccess.Should().BeFalse();
+        result.Reason.Should().Be("Username can not be longer than 128 characters.");
     }
 }

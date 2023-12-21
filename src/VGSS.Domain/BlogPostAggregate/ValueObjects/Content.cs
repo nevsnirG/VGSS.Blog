@@ -6,12 +6,18 @@ public sealed class Content : ValueObject
 {
     public string Value { get; }
 
-    public Content(string value)
+    private Content(string value)
+    {
+        Value = value;
+    }
+
+    public static Result<Content?> Create(string? value)
     {
         if (string.IsNullOrWhiteSpace(value))
-            throw new ArgumentNullException(nameof(value), "Content can not be empty.");
+            return Result.Fail<Content?>("Content can not be empty.");
 
-        Value = value;
+        var content = new Content(value);
+        return Result.Success(content);
     }
 
     protected override IEnumerable<object> GetEqualityComponents()

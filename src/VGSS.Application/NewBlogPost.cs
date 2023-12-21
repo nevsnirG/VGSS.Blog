@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using VGSS.Domain;
 using VGSS.Domain.BloggerAggregate;
 using VGSS.Domain.BlogPostAggregate.Events;
 using VGSS.Domain.BlogPostAggregate.ValueObjects;
@@ -15,9 +16,13 @@ public static class NewBlogPost
         {
             var user = await bloggerRepository.GetById(request.BloggerId);
 
-            var title = new Title(request.Title);
-            var content = new Content(request.Content);
-            var blogPost = user.PostNewBlogPost(title, content);
+            var title = Title.Create(request.Title);
+            if (!title.IsSuccess) { throw new NotImplementedException(); }
+
+            var content = Content.Create(request.Content);
+            if (!content.IsSuccess) { throw new NotImplementedException(); }
+
+            var blogPost = user.PostNewBlogPost(title!, content!);
 
             await blogPostRepository.Save(blogPost);
 

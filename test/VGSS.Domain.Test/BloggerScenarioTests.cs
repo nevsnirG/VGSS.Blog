@@ -19,9 +19,9 @@ public class BloggerScenarioTests(BloggerScenarioFixture fixture) : IClassFixtur
     [Fact(DisplayName = "100 Register new user"), TestPriority(100)]
     public void RegisterNewBlogger()
     {
-        var username = new Username("test username");
+        var username = Username.Create("test username");
 
-        var blogger = Blogger.Register(username);
+        var blogger = Blogger.Register(username!);
 
         blogger.Should().NotBeNull();
         blogger.Username.Should().NotBeNull();
@@ -30,7 +30,7 @@ public class BloggerScenarioTests(BloggerScenarioFixture fixture) : IClassFixtur
         blogger.DomainEvents.Should().ContainSingle()
             .Which.Should().BeOfType<BloggerRegisteredEvent>()
             .Which.Should().BeEquivalentTo(
-                new BloggerRegisteredEvent(blogger.Id, username, DateTimeOffset.UtcNow, 1),
+                new BloggerRegisteredEvent(blogger.Id, username!, DateTimeOffset.UtcNow, 1),
                 DefaultEquivalencyAssertionOptions<BloggerRegisteredEvent>()
             );
 
@@ -45,10 +45,10 @@ public class BloggerScenarioTests(BloggerScenarioFixture fixture) : IClassFixtur
     {
         var blogger = fixture.Blogger!;
 
-        var title = new Title("test title");
-        var content = new Content("test content");
+        var title = Title.Create("test title");
+        var content = Content.Create("test content");
 
-        var blogPost = blogger.PostNewBlogPost(title, content);
+        var blogPost = blogger.PostNewBlogPost(title!, content!);
 
         blogPost.Should().NotBeNull();
         blogPost.Title.Should().NotBeNull();
@@ -59,7 +59,7 @@ public class BloggerScenarioTests(BloggerScenarioFixture fixture) : IClassFixtur
         blogPost.DomainEvents.Should().ContainSingle("because the blog has just been posted")
             .Which.Should().BeOfType<NewBlogPostPostedEvent>()
             .Which.Should().BeEquivalentTo(
-                new NewBlogPostPostedEvent(blogPost.Id, blogger.Id, title, content, DateTimeOffset.UtcNow, 1),
+                new NewBlogPostPostedEvent(blogPost.Id, blogger.Id, title!, content!, DateTimeOffset.UtcNow, 1),
                 DefaultEquivalencyAssertionOptions<NewBlogPostPostedEvent>()
             );
 
@@ -98,9 +98,9 @@ public class BloggerScenarioTests(BloggerScenarioFixture fixture) : IClassFixtur
         var blogPost = fixture.BlogPosts.Single();
 
         var oldTitle = blogPost.Title;
-        var newTitle = new Title("new title");
-        var newContent = new Content("new content");
-        blogPost.Edit(blogger.Id, newTitle, newContent);
+        var newTitle = Title.Create("new title");
+        var newContent = Content.Create("new content");
+        blogPost.Edit(blogger.Id, newTitle!, newContent!);
 
         blogPost.Views.Should().Be(1);
         blogPost.Title.Should().NotBeNull();
@@ -112,7 +112,7 @@ public class BloggerScenarioTests(BloggerScenarioFixture fixture) : IClassFixtur
         blogPost.DomainEvents.Last()
             .Should().BeOfType<BlogPostEditedEvent>()
             .Which.Should().BeEquivalentTo(
-                new BlogPostEditedEvent(blogPost.Id, blogger.Id, DateTimeOffset.UtcNow, oldTitle, newTitle, newContent, 3),
+                new BlogPostEditedEvent(blogPost.Id, blogger.Id, DateTimeOffset.UtcNow, oldTitle, newTitle!, newContent!, 3),
                 DefaultEquivalencyAssertionOptions<BlogPostEditedEvent>()
             );
 

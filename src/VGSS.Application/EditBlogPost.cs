@@ -14,10 +14,14 @@ public static class EditBlogPost
         public async Task<BlogPost> Handle(EditBlogPostCommand request, CancellationToken cancellationToken)
         {
             var blogPost = await blogPostRepository.GetById(request.BlogPostId);
-            var newTitle = new Title(request.Title);
-            var newContent = new Content(request.Content);
 
-            blogPost.Edit(request.EditedBy, newTitle, newContent);
+            var newTitle = Title.Create(request.Title);
+            if (!newTitle.IsSuccess) { throw new NotImplementedException(); }
+
+            var newContent = Content.Create(request.Content);
+            if(!newContent.IsSuccess) { throw new NotImplementedException(); }
+
+            blogPost.Edit(request.EditedBy, newTitle!, newContent!);
             await blogPostRepository.Save(blogPost);
 
             return blogPost;
@@ -26,12 +30,6 @@ public static class EditBlogPost
 
     internal sealed class BlogPostEditedEventHandler : INotificationHandler<BlogPostEditedEvent>
     {
-        public Task Handle(NewBlogPostPostedEvent notification, CancellationToken cancellationToken)
-        {
-            Console.WriteLine($"A new blog post titled '{notification.Title}' was created!");
-            return Task.CompletedTask;
-        }
-
         public Task Handle(BlogPostEditedEvent notification, CancellationToken cancellationToken)
         {
             Console.WriteLine($"The blog post titled '{notification.OldTitle}' was renamed to '{notification.NewTitle}'!");

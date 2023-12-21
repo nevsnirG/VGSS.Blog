@@ -6,14 +6,20 @@ public sealed class Title : ValueObject
 {
     public string Value { get; }
 
-    public Title(string value)
+    private Title(string value)
+    {
+        Value = value;
+    }
+
+    public static Result<Title?> Create(string? value)
     {
         if (string.IsNullOrWhiteSpace(value))
-            throw new ArgumentNullException(nameof(value), "A title can not be empty.");
-        if(value.Length > 128)
-            throw new ArgumentOutOfRangeException(nameof(value), "Title can not be longer than 128 characters.");
+            return Result.Fail<Title?>("Title can not be empty.");
+        if (value.Length > 128)
+            return Result.Fail<Title?>("Title can not be longer than 128 characters.");
 
-        Value = value;
+        var title = new Title(value);
+        return Result.Success(title);
     }
 
     protected override IEnumerable<object> GetEqualityComponents()

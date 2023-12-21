@@ -10,6 +10,9 @@ public class ContentTests
     [InlineData("   ")]
     public void CanNotBeNullOrWhiteSpace(string? value)
     {
-        FluentActions.Invoking(() => new Content(value!)).Should().ThrowExactly<ArgumentNullException>();
+        var result = Content.Create(value);
+
+        result.IsSuccess.Should().BeFalse();
+        result.Reason.Should().Be("Content can not be empty.");
     }
 }
