@@ -1,5 +1,4 @@
 using FluentAssertions.Equivalency;
-using System.Text.Json;
 using VGSS.Domain.BloggerAggregate;
 using VGSS.Domain.BloggerAggregate.Events;
 using VGSS.Domain.BloggerAggregate.ValueObjects;
@@ -9,26 +8,10 @@ using VGSS.TestCommon;
 using static VGSS.TestCommon.ValidationHelper;
 
 namespace VGSS.Domain.Test;
-public class BloggerScenarioFixture
+public class BloggerScenarioFixture : ScenarioFixtureBase
 {
     public Blogger? Blogger { get; set; }
     public List<BlogPost> BlogPosts { get; private set; } = [];
-
-    public void Persist(int priority)
-    {
-        var statesDirectory = GetStatesDirectory();
-        Directory.CreateDirectory(statesDirectory);
-        var fileName = Path.Combine(statesDirectory, $"{priority}.json");
-        var stateAsJson = JsonSerializer.Serialize(this);
-        File.WriteAllText(fileName, stateAsJson);
-    }
-
-    private static string GetStatesDirectory()
-    {
-        var projectDir = Directory.GetParent(Environment.CurrentDirectory)!.Parent!.Parent!.FullName;
-        var statesDirectory = Path.Combine(projectDir, "States");
-        return statesDirectory;
-    }
 }
 
 [TestCaseOrderer("VGSS.TestCommon.PriorityOrderer", "VGSS.TestCommon")]
@@ -135,11 +118,5 @@ public class BloggerScenarioTests(BloggerScenarioFixture fixture) : IClassFixtur
 
         ValidateRehydration<BlogPost>(blogPost.Id, blogPost.DomainEvents);
         fixture.Persist(400);
-    }
-
-    private static Func<EquivalencyAssertionOptions<T>, EquivalencyAssertionOptions<T>> DefaultEquivalencyAssertionOptions<T>()
-    {
-        return (options) =>
-            options.Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromSeconds(1))).WhenTypeIs<DateTimeOffset>();
     }
 }
