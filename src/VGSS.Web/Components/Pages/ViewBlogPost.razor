@@ -20,6 +20,7 @@
     protected override async Task OnInitializedAsync()
     {
         var blogPostId = BlogPostId.FromValue(Guid.Parse(Identifier!));
-        _viewModel = await _mediator.Send(new BlogPostQuery(blogPostId));
+        var result = await _mediator.Send(new BlogPostQuery(blogPostId));
+        _viewModel = result.Match(viewModel => viewModel, notFound => null!); //TODO - Do something on NotFound
     }
 }

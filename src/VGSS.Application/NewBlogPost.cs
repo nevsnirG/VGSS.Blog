@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using VGSS.Domain;
+using OneOf;
 using VGSS.Domain.BloggerAggregate;
 using VGSS.Domain.BlogPostAggregate.Events;
 using VGSS.Domain.BlogPostAggregate.ValueObjects;
@@ -8,19 +8,24 @@ using VGSS.Domain.Ports;
 namespace VGSS.Application;
 public static class NewBlogPost
 {
-    public sealed record class PostNewBlogPostCommand(BloggerId BloggerId, string Title, string Content) : IRequest<BlogPost>;
+    //TODO - Return viewmodel.
+    public sealed record class PostNewBlogPostCommand(BloggerId BloggerId, string Title, string Content) : IRequest<OneOf<BlogPost, ValidationFailed>>;
 
-    internal sealed class PostNewBlogPostCommandHandler(IBloggerRepository bloggerRepository, IBlogPostRepository blogPostRepository) : IRequestHandler<PostNewBlogPostCommand, BlogPost>
+    internal sealed class PostNewBlogPostCommandHandler(IBloggerRepository bloggerRepository, IBlogPostRepository blogPostRepository) :
+        IRequestHandler<PostNewBlogPostCommand, OneOf<BlogPost, ValidationFailed>>
     {
-        public async Task<BlogPost> Handle(PostNewBlogPostCommand request, CancellationToken cancellationToken)
+        public async Task<OneOf<BlogPost, ValidationFailed>> Handle(PostNewBlogPostCommand request, CancellationToken cancellationToken)
         {
-            var user = await bloggerRepository.GetById(request.BloggerId);
+            var user = await bloggerRepository.GetById(request.BloggerId)
+                ?? throw new InvalidOperationException($"No user with id {request.BloggerId} exists.");
 
             var title = Title.Create(request.Title);
-            if (!title.IsSuccess) { throw new NotImplementedException(); }
+            if (!title.IsSuccess)
+                return new ValidationFailed(title.Reason);
 
             var content = Content.Create(request.Content);
-            if (!content.IsSuccess) { throw new NotImplementedException(); }
+            if (!content.IsSuccess)
+                return new ValidationFailed(content.Reason);
 
             var blogPost = user.PostNewBlogPost(title!, content!);
 

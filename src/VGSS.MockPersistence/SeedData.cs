@@ -19,11 +19,11 @@ public static class SeedData
         for (var i = 0; i < 10; i++)
         {
             var bloggerId = BloggerId.New();
-            var bloggerRegisteredEvent = new BloggerRegisteredEvent(bloggerId, new Username("Henk" + i), DateTimeOffset.UtcNow, 1);
+            var bloggerRegisteredEvent = new BloggerRegisteredEvent(bloggerId, Username.Create("Henk" + i)!, DateTimeOffset.UtcNow, 1);
             _bloggers.Add(bloggerId, [bloggerRegisteredEvent]);
 
             var blogPostId = BlogPostId.New();
-            var newBlogPostPostedEvent = new NewBlogPostPostedEvent(blogPostId, bloggerId, new Title("Title" + i), new Content("Content" + i), DateTimeOffset.UtcNow, 1);
+            var newBlogPostPostedEvent = new NewBlogPostPostedEvent(blogPostId, bloggerId, Title.Create("Title" + i)!, Content.Create("Content" + i)!, DateTimeOffset.UtcNow, 1);
             _blogPosts.Add(blogPostId, [newBlogPostPostedEvent]);
 
             var user = new Blogger(bloggerId, _bloggers[bloggerId]);
