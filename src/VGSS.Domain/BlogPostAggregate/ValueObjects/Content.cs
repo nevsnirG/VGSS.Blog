@@ -9,7 +9,7 @@ public sealed class Content : ValueObject
     public Content(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
-            throw new ArgumentNullException("Content can not be empty.");
+            throw new ArgumentNullException(nameof(value), "Content can not be empty.");
 
         Value = value;
     }

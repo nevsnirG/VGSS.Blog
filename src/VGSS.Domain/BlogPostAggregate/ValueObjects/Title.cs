@@ -9,7 +9,7 @@ public sealed class Title : ValueObject
     public Title(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
-            throw new ArgumentNullException("A title can not be empty.");
+            throw new ArgumentNullException(nameof(value), "A title can not be empty.");
         if(value.Length > 128)
             throw new ArgumentOutOfRangeException(nameof(value), "Title can not be longer than 128 characters.");
 
