@@ -1,3 +1,4 @@
+using FluentAssertions.Equivalency;
 using System.Text.Json;
 using VGSS.Domain.BloggerAggregate;
 using VGSS.Domain.BloggerAggregate.Events;
@@ -22,7 +23,7 @@ public class BloggerScenarioFixture
         File.WriteAllText(fileName, stateAsJson);
     }
 
-    private string GetStatesDirectory()
+    private static string GetStatesDirectory()
     {
         var projectDir = Directory.GetParent(Environment.CurrentDirectory)!.Parent!.Parent!.FullName;
         var statesDirectory = Path.Combine(projectDir, "States");
@@ -47,13 +48,8 @@ public class BloggerScenarioTests(BloggerScenarioFixture fixture) : IClassFixtur
         blogger.DomainEvents.Should().ContainSingle()
             .Which.Should().BeOfType<BloggerRegisteredEvent>()
             .Which.Should().BeEquivalentTo(
-                new
-                {
-                    BloggerId = blogger.Id,
-                    Version = 1,
-                    Username = username,
-                    RegisteredAt = DateTimeOffset.UtcNow
-                }, options => options.Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromSeconds(1))).WhenTypeIs<DateTimeOffset>()
+                new BloggerRegisteredEvent(blogger.Id, username, DateTimeOffset.UtcNow, 1),
+                DefaultEquivalencyAssertionOptions<BloggerRegisteredEvent>()
             );
 
         ValidateRehydration<Blogger>(blogger.Id, blogger.DomainEvents);
@@ -81,16 +77,8 @@ public class BloggerScenarioTests(BloggerScenarioFixture fixture) : IClassFixtur
         blogPost.DomainEvents.Should().ContainSingle("because the blog has just been posted")
             .Which.Should().BeOfType<NewBlogPostPostedEvent>()
             .Which.Should().BeEquivalentTo(
-                new
-                {
-                    blogPost.Id,
-                    PostedBy = blogger.Id,
-                    Content = content,
-                    Title = title,
-                    PostedAt = DateTimeOffset.UtcNow,
-                    Version = 1
-                },
-                options => options.Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromSeconds(1))).WhenTypeIs<DateTimeOffset>()
+                new NewBlogPostPostedEvent(blogPost.Id, blogger.Id, title, content, DateTimeOffset.UtcNow, 1),
+                DefaultEquivalencyAssertionOptions<NewBlogPostPostedEvent>()
             );
 
         ValidateRehydration<BlogPost>(blogPost.Id, blogPost.DomainEvents);
@@ -113,13 +101,8 @@ public class BloggerScenarioTests(BloggerScenarioFixture fixture) : IClassFixtur
         blogPost.DomainEvents.Last()
             .Should().BeOfType<BlogPostViewedEvent>()
             .Which.Should().BeEquivalentTo(
-                new
-                {
-                    blogPost.Id,
-                    ViewedBy = blogger.Id,
-                    ViewedAt = DateTimeOffset.UtcNow,
-                    Version = 2
-                }, options => options.Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromSeconds(1))).WhenTypeIs<DateTimeOffset>()
+                new BlogPostViewedEvent(blogPost.Id, blogger.Id, DateTimeOffset.UtcNow, 2),
+                DefaultEquivalencyAssertionOptions<BlogPostViewedEvent>()
             );
 
         ValidateRehydration<BlogPost>(blogPost.Id, blogPost.DomainEvents);
@@ -146,18 +129,17 @@ public class BloggerScenarioTests(BloggerScenarioFixture fixture) : IClassFixtur
         blogPost.DomainEvents.Last()
             .Should().BeOfType<BlogPostEditedEvent>()
             .Which.Should().BeEquivalentTo(
-                new
-                {
-                    blogPost.Id,
-                    EditedBy = blogger.Id,
-                    EditedAt = DateTimeOffset.UtcNow,
-                    NewTitle = newTitle,
-                    NewContent = newContent,
-                    Version = 3
-                }, options => options.Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromSeconds(1))).WhenTypeIs<DateTimeOffset>()
+                new BlogPostEditedEvent(blogPost.Id, blogger.Id, DateTimeOffset.UtcNow, newTitle, newContent, 3),
+                DefaultEquivalencyAssertionOptions<BlogPostEditedEvent>()
             );
 
         ValidateRehydration<BlogPost>(blogPost.Id, blogPost.DomainEvents);
         fixture.Persist(400);
+    }
+
+    private static Func<EquivalencyAssertionOptions<T>, EquivalencyAssertionOptions<T>> DefaultEquivalencyAssertionOptions<T>()
+    {
+        return (options) =>
+            options.Using<DateTimeOffset>(ctx => ctx.Subject.Should().BeCloseTo(ctx.Expectation, TimeSpan.FromSeconds(1))).WhenTypeIs<DateTimeOffset>();
     }
 }
