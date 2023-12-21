@@ -1,4 +1,3 @@
-using FluentAssertions.Equivalency;
 using VGSS.Domain.BloggerAggregate;
 using VGSS.Domain.BloggerAggregate.Events;
 using VGSS.Domain.BloggerAggregate.ValueObjects;
@@ -98,6 +97,7 @@ public class BloggerScenarioTests(BloggerScenarioFixture fixture) : IClassFixtur
         var blogger = fixture.Blogger!;
         var blogPost = fixture.BlogPosts.Single();
 
+        var oldTitle = blogPost.Title;
         var newTitle = new Title("new title");
         var newContent = new Content("new content");
         blogPost.Edit(blogger.Id, newTitle, newContent);
@@ -112,7 +112,7 @@ public class BloggerScenarioTests(BloggerScenarioFixture fixture) : IClassFixtur
         blogPost.DomainEvents.Last()
             .Should().BeOfType<BlogPostEditedEvent>()
             .Which.Should().BeEquivalentTo(
-                new BlogPostEditedEvent(blogPost.Id, blogger.Id, DateTimeOffset.UtcNow, newTitle, newContent, 3),
+                new BlogPostEditedEvent(blogPost.Id, blogger.Id, DateTimeOffset.UtcNow, oldTitle, newTitle, newContent, 3),
                 DefaultEquivalencyAssertionOptions<BlogPostEditedEvent>()
             );
 

@@ -33,6 +33,6 @@ public partial class BlogPost : AggregateRoot<BlogPostId>
 
     public void Edit(BloggerId editedBy, Title newTitle, Content newContent)
     {
-        RaiseAndApplyDomainEvent(new BlogPostEditedEvent(Id, editedBy, DateTimeOffset.UtcNow, newTitle, newContent, NextVersion));
+        RaiseAndApplyDomainEvent(new BlogPostEditedEvent(Id, editedBy, DateTimeOffset.UtcNow, Title, newTitle, newContent, NextVersion));
     }
 }
