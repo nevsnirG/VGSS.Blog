@@ -6,10 +6,20 @@
 @using BlogPostViewModel = VGSS.Application.ViewBlogPost.ViewModel
 @inject IMediator _mediator
 
-<title>@_viewModel!.Title</title>
-<h1>@_viewModel!.Title</h1>
-<h6>Posted by @_viewModel.PostedBy.Username at @_viewModel.PostedAt.ToString("hh':'MM")</h6>
-<p>@_viewModel.Content</p>
+@{
+    if (_viewModel is null)
+    {
+        <title>NotFound</title>
+        <h1>404 NOT FOUND</h1>
+    }
+    else
+    {
+        <title>@_viewModel!.Title</title>
+        <h1>@_viewModel!.Title</h1>
+        <h6>Posted by @_viewModel.PostedBy.Username at @_viewModel.PostedAt.ToString("hh':'MM")</h6>
+        <p>@_viewModel.Content</p>
+    }
+}
 
 @code {
     [Parameter]

@@ -11,10 +11,10 @@ internal sealed class BlogPostRepositoryMock : IBlogPostRepository
             );
     }
 
-    public Task<BlogPost> GetById(BlogPostId blogPostId)
+    public Task<BlogPost?> GetById(BlogPostId blogPostId)
     {
         return Task.FromResult(
-            SeedData.BlogPosts.Single(x => x.Id == blogPostId)
+            SeedData.BlogPosts.SingleOrDefault(x => x.Id == blogPostId)
             );
     }
 
