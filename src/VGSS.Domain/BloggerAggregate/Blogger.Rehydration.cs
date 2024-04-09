@@ -1,8 +1,7 @@
-﻿using MinimalRichDomain;
-using VGSS.Domain.BloggerAggregate.Events;
+﻿using VGSS.Domain.BloggerAggregate.Events;
 
 namespace VGSS.Domain.BloggerAggregate;
-public partial class Blogger : IApplyEvent<BloggerRegisteredEvent>
+public partial class Blogger
 {
     protected override void ValidateState()
     {
@@ -10,7 +9,12 @@ public partial class Blogger : IApplyEvent<BloggerRegisteredEvent>
             throw new InvalidOperationException("Blogger is in a corrupt state. Username is missing.");
     }
 
-    void IApplyEvent<BloggerRegisteredEvent>.Apply(BloggerRegisteredEvent @event)
+    protected override void Apply(MinimalRichDomain.IDomainEvent @event)
+    {
+        ApplyEvent((dynamic)@event);
+    }
+
+    private void ApplyEvent(BloggerRegisteredEvent @event)
     {
         Username = @event.Username;
     }

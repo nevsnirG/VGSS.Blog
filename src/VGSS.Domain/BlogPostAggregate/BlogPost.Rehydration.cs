@@ -2,7 +2,7 @@
 using VGSS.Domain.BlogPostAggregate.Events;
 
 namespace VGSS.Domain.BloggerAggregate;
-public partial class BlogPost : IApplyEvent<NewBlogPostPostedEvent>, IApplyEvent<BlogPostViewedEvent>, IApplyEvent<BlogPostEditedEvent>
+public partial class BlogPost
 {
     protected override void ValidateState()
     {
@@ -16,7 +16,12 @@ public partial class BlogPost : IApplyEvent<NewBlogPostPostedEvent>, IApplyEvent
             throw new InvalidOperationException("BlogPost is in a corrupt state. PostedAt is missing.");
     }
 
-    void IApplyEvent<NewBlogPostPostedEvent>.Apply(NewBlogPostPostedEvent @event)
+    protected override void Apply(MinimalRichDomain.IDomainEvent @event)
+    {
+        ApplyEvent((dynamic)@event);
+    }
+
+    private void ApplyEvent(NewBlogPostPostedEvent @event)
     {
         PostedBy = @event.PostedBy;
         PostedAt = @event.PostedAt;
@@ -25,12 +30,12 @@ public partial class BlogPost : IApplyEvent<NewBlogPostPostedEvent>, IApplyEvent
         Views = 0;
     }
 
-    void IApplyEvent<BlogPostViewedEvent>.Apply(BlogPostViewedEvent @event)
+    private void ApplyEvent(BlogPostViewedEvent _)
     {
         Views++;
     }
 
-    void IApplyEvent<BlogPostEditedEvent>.Apply(BlogPostEditedEvent @event)
+    private void ApplyEvent(BlogPostEditedEvent @event)
     {
         Title = @event.NewTitle;
         Content = @event.NewContent;

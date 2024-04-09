@@ -1,5 +1,4 @@
-﻿using MediatR;
-using MinimalRichDomain;
+﻿using MinimalRichDomain;
 using VGSS.Domain.BloggerAggregate.Events;
 using VGSS.Domain.BloggerAggregate.ValueObjects;
 using VGSS.Domain.BlogPostAggregate.ValueObjects;
