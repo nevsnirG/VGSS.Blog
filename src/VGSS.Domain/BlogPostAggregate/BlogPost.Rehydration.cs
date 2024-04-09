@@ -1,5 +1,4 @@
-﻿using MinimalRichDomain;
-using VGSS.Domain.BlogPostAggregate.Events;
+﻿using VGSS.Domain.BlogPostAggregate.Events;
 
 namespace VGSS.Domain.BloggerAggregate;
 public partial class BlogPost
